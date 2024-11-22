@@ -21,13 +21,13 @@ function StockInput () {
   return (
     <div>
       <label htmlFor='ticker'>銘柄コード</label>
-      <input type='text' id='ticker' />
+      <input type='text' name='ticker' id='ticker' />
       <label htmlFor='stockPrices'>取得単価</label>
-      <input type='text' id='stockPrices' />
+      <input type='text' name='stockPrices' id='stockPrices' />
       <label htmlFor='stockNumberHeld'>保有株数</label>
-      <input type='text' id='stockNumberHeld' />
+      <input type='text' name='stockNumberHeld' id='stockNumberHeld' />
       <label htmlFor='goalPrices'>目標利益</label>
-      <input type='text' id='goalPrices' />
+      <input type='text' name='goalPrices' id='goalPrices' />
     </div>
   );
 }
