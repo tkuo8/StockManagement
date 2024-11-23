@@ -40,7 +40,7 @@ function StockInput() {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await fetch("http://localhost:8080/api/stock-register", {
+    const response = await fetch("http://localhost:8080/api/stocks", {
       method: "POST",
       headers: {
         "content-type": "application/json",

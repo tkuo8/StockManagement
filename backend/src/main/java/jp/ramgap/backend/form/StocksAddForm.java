@@ -1,4 +1,4 @@
-package jp.ramgap.backend.model;
+package jp.ramgap.backend.form;
 
 import java.math.BigDecimal;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StockRegisteredByUser {
+public class StocksAddForm {
     private String symbol;
     private BigDecimal purchasePrice;
     private Integer quantity;

@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jp.ramgap.backend.model.StockRegisteredByUser;
+import jp.ramgap.backend.form.StocksAddForm;
 
 @RestController
-@RequestMapping("/api/stock-register")
+@RequestMapping("/api/stocks")
 @CrossOrigin(origins = "http://localhost:3000") // React側のURLを許可
-public class StockRegisterController {
-    private final List<StockRegisteredByUser> stocks = new ArrayList<>();
+public class StocksController {
+    private final List<StocksAddForm> stocks = new ArrayList<>();
 
     @PostMapping
-    public String postStock(@RequestBody StockRegisteredByUser stockRegisteredByUser) {
+    public String postStocks(@RequestBody StocksAddForm stockRegisteredByUser) {
         stocks.add(stockRegisteredByUser);
 
         return "Stock Registered successfully!";
     }
 
     @GetMapping
-    public List<StockRegisteredByUser> getStocks() {
+    public List<StocksAddForm> getStocks() {
         return stocks;
     }
 

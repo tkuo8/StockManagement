@@ -127,7 +127,7 @@
 
 - **POST /stocks**
 
-  - **パラメータ**: `symbol`, `purchase_price`, `quantity`, `target_price`
+  - **パラメータ**: `symbol`, `purchase_price`, `quantity`, `target_price`, `cut_loss_price`
   - **レスポンス**: 登録した株情報
 
 - **PUT /stocks/{stock_id}**
