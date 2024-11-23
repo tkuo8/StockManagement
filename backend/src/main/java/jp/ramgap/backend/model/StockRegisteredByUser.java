@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StockInfoEnteredByUser {
+public class StockRegisteredByUser {
     private Integer ticker;
     private Integer stockPrices;
     private Integer stockNumberHeld;
