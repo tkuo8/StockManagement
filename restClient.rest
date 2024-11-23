@@ -6,20 +6,9 @@ POST http://localhost:8080/api/stock-register HTTP/1.1
 content-type: application/json
 
 {
-    "ticker": "0123",
-    "stockPrices": "400",
-    "stockNumberHeld": "100",
-    "goalPrices": "500"
-}
-
-###
-
-POST http://localhost:8080/api/stock-register HTTP/1.1
-content-type: application/json
-
-{
-    "ticker": "4567",
-    "stockPrices": "1000",
-    "stockNumberHeld": "100",
-    "goalPrices": "1100"
+    "symbol": "0123",
+    "purchasePrice": "400",
+    "quantity": "100",
+    "targetPrice": "500",
+    "cutlossPrice": "350"
 }
