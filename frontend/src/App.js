@@ -20,16 +20,41 @@ function Title () {
 function StockInput () {
   return (
     <div>
-      <label htmlFor='ticker'>銘柄コード</label>
-      <input type='text' name='ticker' id='ticker' />
-      <label htmlFor='stockPrices'>取得単価</label>
-      <input type='text' name='stockPrices' id='stockPrices' />
-      <label htmlFor='stockNumberHeld'>保有株数</label>
-      <input type='text' name='stockNumberHeld' id='stockNumberHeld' />
-      <label htmlFor='goalPrices'>目標利益</label>
-      <input type='text' name='goalPrices' id='goalPrices' />
+      <label htmlFor='symbol'>銘柄コード</label>
+      <input type='text' name='symbol' id='symbol' />
+      <label htmlFor='purchasePrice'>取得価格</label>
+      <input type='text' name='purchasePrice' id='purchasePrice' />
+      <label htmlFor='quantity'>保有株数</label>
+      <input type='text' name='quantity' id='quantity' />
+      <label htmlFor='targetPrice'>売却目標価格</label>
+      <input type='text' name='targetPrice' id='targetPrice' />
+      <label htmlFor="cutlossPrice">損切り価格</label>
+      <input type="text" name="cutlossPrice" id="cutlossPrice" />
     </div>
   );
+}
+
+function sendStockInfo() {
+  fetch("http://localhost:8080/api/stock-register", {
+  "method": "POST",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "ticker": "0123",
+    "stockPrices": "400",
+    "stockNumberHeld": "100",
+    "goalPrices": "500"
+  }
+})
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
+});
+
+  
 }
 
 function App () {

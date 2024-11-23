@@ -45,6 +45,7 @@
 - `purchase_price` (DECIMAL(10,2)): ユーザーが株を購入した価格。
 - `quantity` (INT): ユーザーが保有している株式の数量。
 - `target_price` (DECIMAL(10,2)): ユーザーが設定した売却目標価格。
+- `cutloss_price` (DECIMAL(10,2)): ユーザーが設定した損切り価格。
 - `created_at` (DATETIME): 株情報が登録された日時。
 - `updated_at` (DATETIME): 株情報が最後に更新された日時。
 
