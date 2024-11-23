@@ -34,7 +34,8 @@ function StockInput () {
   );
 }
 
-function sendStockInfo() {
+const handleSubmit = async (e) => {
+  e.preventDefault();
   fetch("http://localhost:8080/api/stock-register", {
   "method": "POST",
   "headers": {
