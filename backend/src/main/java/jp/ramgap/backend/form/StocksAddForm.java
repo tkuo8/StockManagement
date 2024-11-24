@@ -12,5 +12,5 @@ public class StocksAddForm {
     private BigDecimal purchasePrice;
     private Integer quantity;
     private BigDecimal targetPrice;
-    private BigDecimal cutlossPrice;
+    private BigDecimal cutLossPrice;
 }

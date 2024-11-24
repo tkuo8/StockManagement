@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useState } from "react";
 
 function StockManagementApp() {
   return (
@@ -18,50 +19,94 @@ function Title() {
 }
 
 function StockInput() {
+  const [formData, setFormData] = useState({
+    symbol: "",
+    purchasePrice: "",
+    quantity: "",
+    targetPrice: "",
+    cutLossPrice: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8080/api/stocks", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        console.log("Data submitted successfully!");
+        setFormData({
+          symbol: "",
+          purchasePrice: "",
+          quantity: "",
+          targetPrice: "",
+          cutLossPrice: "",
+        });
+      } else {
+        console.log("Failed to submit data.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="symbol">銘柄コード</label>
-        <input type="text" name="symbol" id="symbol" />
+        <input
+          type="text"
+          name="symbol"
+          id="symbol"
+          value={formData.symbol}
+          onChange={handleChange}
+        />
         <label htmlFor="purchasePrice">取得価格</label>
-        <input type="text" name="purchasePrice" id="purchasePrice" />
+        <input
+          type="text"
+          name="purchasePrice"
+          id="purchasePrice"
+          value={formData.purchasePrice}
+          onChange={handleChange}
+        />
         <label htmlFor="quantity">保有株数</label>
-        <input type="text" name="quantity" id="quantity" />
+        <input
+          type="text"
+          name="quantity"
+          id="quantity"
+          value={formData.quantity}
+          onChange={handleChange}
+        />
         <label htmlFor="targetPrice">売却目標価格</label>
-        <input type="text" name="targetPrice" id="targetPrice" />
-        <label htmlFor="cutlossPrice">損切り価格</label>
-        <input type="text" name="cutlossPrice" id="cutlossPrice" />
+        <input
+          type="text"
+          name="targetPrice"
+          id="targetPrice"
+          value={formData.targetPrice}
+          onChange={handleChange}
+        />
+        <label htmlFor="cutLossPrice">損切り価格</label>
+        <input
+          type="text"
+          name="cutLossPrice"
+          id="cutLossPrice"
+          value={formData.cutLossPrice}
+          onChange={handleChange}
+        />
         <button type="submit">登録</button>
       </form>
     </div>
   );
 }
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch("http://localhost:8080/api/stocks", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        symbol: "0123",
-        purchasePrice: "400",
-        quantity: "100",
-        targetPrice: "500",
-        cutlossPrice: "350",
-      }),
-    });
-    if (response.ok) {
-      console.log("Data submitted successfully!");
-    } else {
-      console.log("Failed to submit data.");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 function App() {
   return (
