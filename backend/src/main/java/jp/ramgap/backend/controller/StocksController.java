@@ -2,7 +2,9 @@ package jp.ramgap.backend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -22,12 +24,19 @@ import jp.ramgap.backend.form.StocksAddForm;
 public class StocksController {
     private final List<StocksAddForm> stocks = new ArrayList<>();
 
+    private final MessageSource messageSource;
+    
+    public StocksController(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @PostMapping
-    public ResponseEntity<?> postStocks(@Validated @RequestBody StocksAddForm stocksAddForm, BindingResult bindingResult) {
+    public ResponseEntity<String> postStocks(@Validated @RequestBody StocksAddForm stocksAddForm, BindingResult bindingResult, Locale locale) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessage.append(error.getDefaultMessage()).append("; ");
+                String message = messageSource.getMessage(error, locale);
+                errorMessage.append(message).append("; ");
             }
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }

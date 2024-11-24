@@ -17,7 +17,7 @@ import lombok.Data;
 public class StocksAddForm {
 
     @NotBlank
-    @Size(min = 4, max = 4, message = "{Size.stock.symbol}")
+    @Size(min = 4, max = 4)
     private String symbol;
 
     @NotNull
