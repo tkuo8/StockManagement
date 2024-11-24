@@ -52,6 +52,8 @@ function StockInput() {
           cutLossPrice: "",
         });
       } else {
+        const errorText = await response.text();
+        alert(`Validation error ${errorText}`);
         console.log("Failed to submit data.");
       }
     } catch (error) {
