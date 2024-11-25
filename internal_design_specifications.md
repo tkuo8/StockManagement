@@ -32,8 +32,8 @@
 - `username` (VARCHAR(255)): ユーザーのログイン名。ユニークである必要があります。
 - `password` (VARCHAR(255)): ハッシュ化されたユーザーのパスワード。セキュリティのために暗号化します。
 - `email` (VARCHAR(255)): ユーザーのメールアドレス。ユニークである必要があります。
-- `created_at` (DATETIME): ユーザーがアカウントを作成した日時。
-- `updated_at` (DATETIME): ユーザー情報が最後に更新された日時。
+- `created_at` (TIMESTAMP): ユーザーがアカウントを作成した日時。
+- `updated_at` (TIMESTAMP): ユーザー情報が最後に更新された日時。
 
 #### 2. **Stock（株情報）テーブル**
 
@@ -46,8 +46,8 @@
 - `quantity` (INT): ユーザーが保有している株式の数量。
 - `target_price` (DECIMAL(10,2)): ユーザーが設定した売却目標価格。
 - `cutloss_price` (DECIMAL(10,2)): ユーザーが設定した損切り価格。
-- `created_at` (DATETIME): 株情報が登録された日時。
-- `updated_at` (DATETIME): 株情報が最後に更新された日時。
+- `created_at` (TIMESTAMP): 株情報が登録された日時。
+- `updated_at` (TIMESTAMP): 株情報が最後に更新された日時。
 
 #### 3. **Transaction（取引履歴）テーブル**
 
@@ -58,7 +58,7 @@
 - `type` (ENUM('BUY', 'SELL')): 取引のタイプ。株の購入または売却を示します。
 - `price` (DECIMAL(10,2)): 取引時の株価。
 - `quantity` (INT): 取引で売買された株式の数量。
-- `transaction_date` (DATETIME): 取引が行われた日時。
+- `transaction_date` (TIMESTAMP): 取引が行われた日時。
 
 #### 4. **Alert（アラート設定）テーブル**
 
@@ -69,7 +69,7 @@
 - `stock_id` (INT, FK): アラートが設定された株情報の ID。`Stock`テーブルの`stock_id`を参照します。
 - `alert_type` (ENUM('PRICE', 'TARGET_REACHED')): アラートのタイプ。`PRICE`は株価が指定された価格に達したとき、`TARGET_REACHED`は設定した目標価格に達したときに通知されます。
 - `alert_value` (DECIMAL(10,2)): アラートが発動する株価の値。
-- `created_at` (DATETIME): アラートが設定された日時。
+- `created_at` (TIMESTAMP): アラートが設定された日時。
 
 ### 3.2 インデックス設計
 
