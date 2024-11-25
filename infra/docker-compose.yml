@@ -1,0 +1,27 @@
+services:
+  mysql:
+    build: ./db
+    image: pragma8888/mydocker:mysql
+    restart: always
+    container_name: stock-management-mysql-container
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+      # ports:の"${FORWARD_DB_PORT:-3306}:3306"は環境変数FORWARD_DB_PORTが設定されていない場合デフォルトで3306ポートを使用することを表す。
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - type: volume
+        source: mysql_volume
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./db/logs
+        target: /var/log/mysql
+volumes:
+  mysql_volume:
+    driver: local
