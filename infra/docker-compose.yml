@@ -1,7 +1,7 @@
 services:
   mysql:
     build: ./db
-    image: pragma8888/mydocker:mysql
+    image: pragma8888/mydocker:mysql-stock-management
     restart: always
     container_name: stock-management-mysql-container
     ports:

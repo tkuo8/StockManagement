@@ -1,0 +1,124 @@
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-26T01:13:28.395538Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-26T01:13:38.558820Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-26T01:17:14.327786Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-11-26T01:28:59.980333Z	    8 Connect	root@192.168.65.1 on  using SSL/TLS
+2024-11-26T01:28:59.984375Z	    8 Query	select @@version_comment limit 1
+2024-11-26T01:29:05.932239Z	    8 Query	show databases
+2024-11-26T01:39:21.686945Z	    8 Quit	
+2024-11-26T01:42:14.380115Z	    9 Connect	root@localhost on stockManagement using Socket
+2024-11-26T01:42:14.383241Z	    9 Query	select @@version_comment limit 1
+2024-11-26T01:42:14.385049Z	    9 Query	CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,      -- 主キー、自動インクリメント
+    username VARCHAR(255) NOT NULL UNIQUE,       -- ユーザー名、ユニーク、NULL不可
+    password VARCHAR(255) NOT NULL,              -- ハッシュ化されたパスワード、NULL不可
+    email VARCHAR(255) NOT NULL UNIQUE,          -- メールアドレス、ユニーク、NULL不可
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- アカウント作成日時、デフォルトで現在日時
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 情報更新日時、更新時に自動更新
+)
+2024-11-26T01:42:14.423564Z	    9 Quit	
+2024-11-26T01:50:54.801157Z	   10 Connect	root@localhost on stockManagement using Socket
+2024-11-26T01:50:54.803780Z	   10 Query	select @@version_comment limit 1
+2024-11-26T01:50:54.807440Z	   10 Query	CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,      -- 主キー、自動インクリメント
+    username VARCHAR(255) NOT NULL UNIQUE,       -- ユーザー名、ユニーク、NULL不可
+    password VARCHAR(255) NOT NULL,              -- ハッシュ化されたパスワード、NULL不可
+    email VARCHAR(255) NOT NULL UNIQUE,          -- メールアドレス、ユニーク、NULL不可
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- アカウント作成日時、デフォルトで現在日時
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 情報更新日時、更新時に自動更新
+)
+2024-11-26T01:50:54.823684Z	   10 Quit	
+2024-11-26T01:52:59.796664Z	   11 Connect	root@localhost on  using Socket
+2024-11-26T01:52:59.799530Z	   11 Query	select @@version_comment limit 1
+2024-11-26T01:53:09.575092Z	   11 Query	show databases
+2024-11-26T01:53:16.931343Z	   11 Query	SELECT DATABASE()
+2024-11-26T01:53:16.932762Z	   11 Init DB	stockManagement
+2024-11-26T01:53:16.936667Z	   11 Query	show databases
+2024-11-26T01:53:16.939260Z	   11 Query	show tables
+2024-11-26T01:53:16.945131Z	   11 Query	SELECT * FROM `users` LIMIT 0
+2024-11-26T01:53:22.653472Z	   11 Query	show tables
+2024-11-26T01:53:29.150269Z	   11 Query	drop table users
+2024-11-26T01:53:49.609363Z	   11 Quit	
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-26T03:16:54.232439Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-11-26T03:18:22.503154Z	    8 Connect	root@localhost on  using Socket
+2024-11-26T03:18:22.523197Z	    8 Query	select @@version_comment limit 1
+2024-11-26T03:18:22.530479Z	    8 Quit	
+2024-11-26T03:18:38.904415Z	    9 Connect	root@localhost on stockManagement using Socket
+2024-11-26T03:18:38.919663Z	    9 Query	select @@version_comment limit 1
+2024-11-26T03:18:38.922638Z	    9 Query	CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,      -- 主キー、自動インクリメント
+    username VARCHAR(255) NOT NULL UNIQUE,       -- ユーザー名、ユニーク、NULL不可
+    password VARCHAR(255) NOT NULL,              -- ハッシュ化されたパスワード、NULL不可
+    email VARCHAR(255) NOT NULL UNIQUE,          -- メールアドレス、ユニーク、NULL不可
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- アカウント作成日時、デフォルトで現在日時
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 情報更新日時、更新時に自動更新
+)
+2024-11-26T03:18:38.984292Z	    9 Quit	
+2024-11-26T03:19:00.713016Z	   10 Connect	root@localhost on stockManagement using Socket
+2024-11-26T03:19:00.714880Z	   10 Query	select @@version_comment limit 1
+2024-11-26T03:19:00.716425Z	   10 Query	CREATE TABLE stocks (
+    stock_id INT AUTO_INCREMENT PRIMARY KEY,      -- 主キー、自動インクリメント
+    user_id INT NOT NULL,                         -- 外部キー、NULL不可
+    symbol VARCHAR(10) NOT NULL,                  -- ティッカーシンボル、NULL不可
+    purchase_price DECIMAL(10,2) NOT NULL,        -- 購入価格
+    quantity INT NOT NULL,                        -- 保有株数
+    target_price DECIMAL(10,2),                   -- 売却目標価格
+    cutloss_price DECIMAL(10,2),                  -- 損切り価格
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 登録日時、デフォルトで現在日時
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- 更新日時、更新時に自動更新
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) -- Userテーブルのuser_idを参照
+)
+2024-11-26T03:19:00.752356Z	   10 Quit	
+2024-11-26T03:19:11.955130Z	   11 Connect	root@localhost on  using Socket
+2024-11-26T03:19:11.956520Z	   11 Query	select @@version_comment limit 1
+2024-11-26T03:19:19.378395Z	   11 Query	SELECT DATABASE()
+2024-11-26T03:19:19.382904Z	   11 Init DB	stockManagement
+2024-11-26T03:19:19.386058Z	   11 Query	show databases
+2024-11-26T03:19:19.400916Z	   11 Query	show tables
+2024-11-26T03:19:19.408564Z	   11 Query	SELECT * FROM `stocks` LIMIT 0
+2024-11-26T03:19:19.426189Z	   11 Query	SELECT * FROM `users` LIMIT 0
+2024-11-26T03:19:22.818053Z	   11 Query	show tables
+2024-11-26T03:19:26.711565Z	   11 Quit	
