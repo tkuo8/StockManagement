@@ -47,6 +47,7 @@ function StockRegister() {
 
   return (
     <div>
+      <h2>株情報登録</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="symbol">銘柄コード</label>
         <input
