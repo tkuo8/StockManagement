@@ -1,5 +1,7 @@
 package jp.ramgap.backend.domain.stock.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import jp.ramgap.backend.domain.stock.model.Stock;
@@ -19,5 +21,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public void addStock(Stock stock) {
         stockMapper.insertOne(stock);
+    }
+
+    // ユーザの株情報全件取得
+    @Override
+    public List<Stock> getStocksByUserId(int userId) {
+        return stockMapper.findStocksByUserId(userId);
     }
 }

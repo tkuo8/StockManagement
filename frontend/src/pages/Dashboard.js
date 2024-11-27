@@ -1,56 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
-
-// カラム定義
-const columns = [
-  {
-    accessorKey: "symbol", // データキー
-    header: "銘柄コード", // ヘッダー名
-  },
-  {
-    accessorKey: "purchasePrice",
-    header: "購入価格",
-  },
-  {
-    accessorKey: "quantity",
-    header: "保有株数",
-  },
-  {
-    accessorKey: "targetPrice",
-    header: "目標価格",
-  },
-  {
-    accessorKey: "cutlossPrice",
-    header: "損切り価格",
-  },
-];
-
-// サンプルデータ
-const data = [
-  {
-    symbol: "1234",
-    purchasePrice: 300,
-    quantity: 100,
-    targetPrice: 400,
-    cutlossPrice: 200,
-  },
-  {
-    symbol: "5678",
-    purchasePrice: 500,
-    quantity: 100,
-    targetPrice: 600,
-    cutlossPrice: 400,
-  },
-  {
-    symbol: "9101",
-    purchasePrice: 1000,
-    quantity: 100,
-    targetPrice: 1100,
-    cutlossPrice: 900,
-  },
-];
+import axios from "axios";
 
 function Dashboard() {
+  const [data, setData] = useState([]);
+  const userId = 1;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/stocks", { params: { userId } })
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock data", error);
+      });
+  }, [userId]);
+
+  // カラム定義
+  const columns = [
+    {
+      accessorKey: "symbol", // データキー
+      header: "銘柄コード", // ヘッダー名
+    },
+    {
+      accessorKey: "purchasePrice",
+      header: "購入価格",
+    },
+    {
+      accessorKey: "quantity",
+      header: "保有株数",
+    },
+    {
+      accessorKey: "targetPrice",
+      header: "目標価格",
+    },
+    {
+      accessorKey: "cutlossPrice",
+      header: "損切り価格",
+    },
+  ];
+
+  // サンプルデータ
+  //   const data = [
+  //     {
+  //       symbol: "1234",
+  //       purchasePrice: 300,
+  //       quantity: 100,
+  //       targetPrice: 400,
+  //       cutlossPrice: 200,
+  //     },
+  //     {
+  //       symbol: "5678",
+  //       purchasePrice: 500,
+  //       quantity: 100,
+  //       targetPrice: 600,
+  //       cutlossPrice: 400,
+  //     },
+  //     {
+  //       symbol: "9101",
+  //       purchasePrice: 1000,
+  //       quantity: 100,
+  //       targetPrice: 1100,
+  //       cutlossPrice: 900,
+  //     },
+  //   ];
+
   // useReactTable フックを使用
   const table = useReactTable({
     data,
