@@ -122,3 +122,206 @@ Time                 Id Command    Argument
 2024-11-26T03:19:19.426189Z	   11 Query	SELECT * FROM `users` LIMIT 0
 2024-11-26T03:19:22.818053Z	   11 Query	show tables
 2024-11-26T03:19:26.711565Z	   11 Quit	
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-26T07:13:48.969325Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-11-26T07:29:50.915926Z	    8 Connect	app@localhost on  using Socket
+2024-11-26T07:29:50.919769Z	    8 Query	select @@version_comment limit 1
+2024-11-26T07:30:00.491121Z	    8 Query	show databases
+2024-11-26T07:30:12.656830Z	    8 Quit	
+2024-11-26T07:30:24.186258Z	    9 Connect	root@localhost on  using Socket
+2024-11-26T07:30:24.189814Z	    9 Query	select @@version_comment limit 1
+2024-11-26T07:30:56.369848Z	    9 Query	SELECT DATABASE()
+2024-11-26T07:30:56.371555Z	    9 Init DB	stockManagement
+2024-11-26T07:30:56.373631Z	    9 Query	show databases
+2024-11-26T07:30:56.376283Z	    9 Query	show tables
+2024-11-26T07:30:56.381008Z	    9 Query	SELECT * FROM `stocks` LIMIT 0
+2024-11-26T07:30:56.404286Z	    9 Query	SELECT * FROM `users` LIMIT 0
+2024-11-26T07:31:03.535074Z	    9 Query	INSERT INTO users (    username,    password,    email) VALUES (    'testuser',    'password',    'test@example.com')
+2024-11-26T07:31:15.759169Z	    9 Query	select * from users
+2024-11-26T16:04:23.279880Z	   10 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:23.345216Z	   10 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:23.390169Z	   10 Query	SET character_set_results = NULL
+2024-11-26T16:04:23.395897Z	   10 Query	SET autocommit=1
+2024-11-26T16:04:23.405136Z	   10 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:23.408648Z	   10 Query	SELECT @@session.transaction_isolation
+2024-11-26T16:04:23.586626Z	   11 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:23.596668Z	   11 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:23.603222Z	   11 Query	SET character_set_results = NULL
+2024-11-26T16:04:23.607344Z	   11 Query	SET autocommit=1
+2024-11-26T16:04:23.610407Z	   11 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:23.756693Z	   12 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:23.764601Z	   12 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:23.772553Z	   12 Query	SET character_set_results = NULL
+2024-11-26T16:04:23.776194Z	   12 Query	SET autocommit=1
+2024-11-26T16:04:23.779317Z	   12 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:23.843508Z	   13 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:23.849529Z	   13 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:23.856199Z	   13 Query	SET character_set_results = NULL
+2024-11-26T16:04:23.859588Z	   13 Query	SET autocommit=1
+2024-11-26T16:04:23.864268Z	   13 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.145336Z	   14 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.148010Z	   14 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.151641Z	   14 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.155257Z	   14 Query	SET autocommit=1
+2024-11-26T16:04:24.158707Z	   14 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.236287Z	   15 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.250580Z	   15 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.252800Z	   15 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.254517Z	   15 Query	SET autocommit=1
+2024-11-26T16:04:24.256439Z	   15 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.316930Z	   16 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.320122Z	   16 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.322795Z	   16 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.324419Z	   16 Query	SET autocommit=1
+2024-11-26T16:04:24.326138Z	   16 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.384304Z	   17 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.386793Z	   17 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.393344Z	   17 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.394947Z	   17 Query	SET autocommit=1
+2024-11-26T16:04:24.396756Z	   17 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.459064Z	   18 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.461381Z	   18 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.469026Z	   18 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.471032Z	   18 Query	SET autocommit=1
+2024-11-26T16:04:24.472915Z	   18 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:04:24.526869Z	   19 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:04:24.529099Z	   19 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:04:24.531234Z	   19 Query	SET character_set_results = NULL
+2024-11-26T16:04:24.532901Z	   19 Query	SET autocommit=1
+2024-11-26T16:04:24.534537Z	   19 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:16:07.380596Z	   10 Quit	
+2024-11-26T16:16:07.421930Z	   11 Quit	
+2024-11-26T16:16:07.430934Z	   12 Quit	
+2024-11-26T16:16:07.442347Z	   13 Quit	
+2024-11-26T16:16:07.451010Z	   14 Quit	
+2024-11-26T16:16:07.472594Z	   15 Quit	
+2024-11-26T16:16:07.486078Z	   16 Quit	
+2024-11-26T16:16:07.493425Z	   17 Quit	
+2024-11-26T16:16:07.496510Z	   18 Quit	
+2024-11-26T16:16:07.500084Z	   19 Quit	
+2024-11-26T16:19:10.362727Z	   20 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:10.371075Z	   20 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:10.374792Z	   20 Query	SET character_set_results = NULL
+2024-11-26T16:19:10.377251Z	   20 Query	SET autocommit=1
+2024-11-26T16:19:10.379631Z	   20 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:10.383637Z	   20 Query	SELECT @@session.transaction_isolation
+2024-11-26T16:19:10.615791Z	   21 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:10.619176Z	   21 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:10.622579Z	   21 Query	SET character_set_results = NULL
+2024-11-26T16:19:10.625283Z	   21 Query	SET autocommit=1
+2024-11-26T16:19:10.627630Z	   21 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:10.693556Z	   22 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:10.697128Z	   22 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:10.701224Z	   22 Query	SET character_set_results = NULL
+2024-11-26T16:19:10.703598Z	   22 Query	SET autocommit=1
+2024-11-26T16:19:10.707575Z	   22 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:10.767860Z	   23 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:10.770945Z	   23 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:10.774310Z	   23 Query	SET character_set_results = NULL
+2024-11-26T16:19:10.776423Z	   23 Query	SET autocommit=1
+2024-11-26T16:19:10.778893Z	   23 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:10.870315Z	   24 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:10.879590Z	   24 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:10.883055Z	   24 Query	SET character_set_results = NULL
+2024-11-26T16:19:10.885300Z	   24 Query	SET autocommit=1
+2024-11-26T16:19:10.887621Z	   24 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:11.027576Z	   25 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:11.030483Z	   25 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:11.033346Z	   25 Query	SET character_set_results = NULL
+2024-11-26T16:19:11.035518Z	   25 Query	SET autocommit=1
+2024-11-26T16:19:11.037885Z	   25 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:11.096552Z	   26 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:11.101769Z	   26 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:11.105944Z	   26 Query	SET character_set_results = NULL
+2024-11-26T16:19:11.108138Z	   26 Query	SET autocommit=1
+2024-11-26T16:19:11.110219Z	   26 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:11.171648Z	   27 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:11.173970Z	   27 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:11.176739Z	   27 Query	SET character_set_results = NULL
+2024-11-26T16:19:11.178511Z	   27 Query	SET autocommit=1
+2024-11-26T16:19:11.180820Z	   27 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:11.235331Z	   28 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:11.237877Z	   28 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:11.240299Z	   28 Query	SET character_set_results = NULL
+2024-11-26T16:19:11.242962Z	   28 Query	SET autocommit=1
+2024-11-26T16:19:11.244981Z	   28 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:19:11.295351Z	   29 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:19:11.303266Z	   29 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:19:11.317413Z	   29 Query	SET character_set_results = NULL
+2024-11-26T16:19:11.321836Z	   29 Query	SET autocommit=1
+2024-11-26T16:19:11.326170Z	   29 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:05.985904Z	   20 Quit	
+2024-11-26T16:24:06.001002Z	   21 Quit	
+2024-11-26T16:24:06.005083Z	   22 Quit	
+2024-11-26T16:24:06.011847Z	   23 Quit	
+2024-11-26T16:24:06.014730Z	   24 Quit	
+2024-11-26T16:24:06.017587Z	   25 Quit	
+2024-11-26T16:24:06.020333Z	   26 Quit	
+2024-11-26T16:24:06.023618Z	   27 Quit	
+2024-11-26T16:24:06.027689Z	   28 Quit	
+2024-11-26T16:24:06.030237Z	   29 Quit	
+2024-11-26T16:24:21.408001Z	   30 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:21.499129Z	   30 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:21.532948Z	   30 Query	SET character_set_results = NULL
+2024-11-26T16:24:21.540249Z	   30 Query	SET autocommit=1
+2024-11-26T16:24:21.549076Z	   30 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:21.563897Z	   30 Query	SELECT @@session.transaction_isolation
+2024-11-26T16:24:21.692747Z	   30 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:21.715954Z	   31 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:21.719682Z	   31 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:21.721833Z	   31 Query	SET character_set_results = NULL
+2024-11-26T16:24:21.723302Z	   31 Query	SET autocommit=1
+2024-11-26T16:24:21.724858Z	   31 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:21.788406Z	   30 Query	insert into stocks( user_id, symbol, purchase_price, quantity, target_price, cutloss_price)
+        values ( 1 , '1234' , 500 , 100 , 600 , 400 )
+2024-11-26T16:24:21.799804Z	   32 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:21.813685Z	   32 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:21.817422Z	   32 Query	SET character_set_results = NULL
+2024-11-26T16:24:21.819975Z	   32 Query	SET autocommit=1
+2024-11-26T16:24:21.826863Z	   32 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:21.895378Z	   33 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:21.902054Z	   33 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:21.905561Z	   33 Query	SET character_set_results = NULL
+2024-11-26T16:24:21.908243Z	   33 Query	SET autocommit=1
+2024-11-26T16:24:21.913319Z	   33 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:21.972774Z	   34 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:21.976942Z	   34 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:21.980296Z	   34 Query	SET character_set_results = NULL
+2024-11-26T16:24:21.982897Z	   34 Query	SET autocommit=1
+2024-11-26T16:24:21.985799Z	   34 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:22.312871Z	   35 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:22.316818Z	   35 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:22.320482Z	   35 Query	SET character_set_results = NULL
+2024-11-26T16:24:22.322711Z	   35 Query	SET autocommit=1
+2024-11-26T16:24:22.324402Z	   35 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:22.384077Z	   36 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:22.388529Z	   36 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:22.390997Z	   36 Query	SET character_set_results = NULL
+2024-11-26T16:24:22.392823Z	   36 Query	SET autocommit=1
+2024-11-26T16:24:22.394440Z	   36 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:22.475348Z	   37 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:22.482078Z	   37 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:22.483823Z	   37 Query	SET character_set_results = NULL
+2024-11-26T16:24:22.485363Z	   37 Query	SET autocommit=1
+2024-11-26T16:24:22.486838Z	   37 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:22.539020Z	   38 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:22.541153Z	   38 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:22.543296Z	   38 Query	SET character_set_results = NULL
+2024-11-26T16:24:22.545347Z	   38 Query	SET autocommit=1
+2024-11-26T16:24:22.546833Z	   38 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:24:22.600027Z	   39 Connect	root@192.168.65.1 on stockManagement using SSL/TLS
+2024-11-26T16:24:22.601911Z	   39 Query	/* mysql-connector-j-8.3.0 (Revision: 805f872a57875f311cb82487efcfb070411a3fa0) */SELECT  @@session.auto_increment_increment AS auto_increment_increment, @@character_set_client AS character_set_client, @@character_set_connection AS character_set_connection, @@character_set_results AS character_set_results, @@character_set_server AS character_set_server, @@collation_server AS collation_server, @@collation_connection AS collation_connection, @@init_connect AS init_connect, @@interactive_timeout AS interactive_timeout, @@license AS license, @@lower_case_table_names AS lower_case_table_names, @@max_allowed_packet AS max_allowed_packet, @@net_write_timeout AS net_write_timeout, @@performance_schema AS performance_schema, @@sql_mode AS sql_mode, @@system_time_zone AS system_time_zone, @@time_zone AS time_zone, @@transaction_isolation AS transaction_isolation, @@wait_timeout AS wait_timeout
+2024-11-26T16:24:22.603879Z	   39 Query	SET character_set_results = NULL
+2024-11-26T16:24:22.605775Z	   39 Query	SET autocommit=1
+2024-11-26T16:24:22.607519Z	   39 Query	SELECT @@session.transaction_read_only
+2024-11-26T16:25:05.927774Z	    9 Query	select * from stocks

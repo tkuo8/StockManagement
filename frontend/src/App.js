@@ -20,11 +20,12 @@ function Title() {
 
 function StockInput() {
   const [formData, setFormData] = useState({
+    userId: "1",
     symbol: "",
     purchasePrice: "",
     quantity: "",
     targetPrice: "",
-    cutLossPrice: "",
+    cutlossPrice: "",
   });
 
   const handleChange = (e) => {
@@ -45,11 +46,12 @@ function StockInput() {
       if (response.ok) {
         console.log("Data submitted successfully!");
         setFormData({
+          userId: "1",
           symbol: "",
           purchasePrice: "",
           quantity: "",
           targetPrice: "",
-          cutLossPrice: "",
+          cutlossPrice: "",
         });
       } else {
         const errorText = await response.text();
@@ -96,12 +98,12 @@ function StockInput() {
           value={formData.targetPrice}
           onChange={handleChange}
         />
-        <label htmlFor="cutLossPrice">損切り価格</label>
+        <label htmlFor="cutlossPrice">損切り価格</label>
         <input
           type="text"
-          name="cutLossPrice"
-          id="cutLossPrice"
-          value={formData.cutLossPrice}
+          name="cutlossPrice"
+          id="cutlossPrice"
+          value={formData.cutlossPrice}
           onChange={handleChange}
         />
         <button type="submit">登録</button>

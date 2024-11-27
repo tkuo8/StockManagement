@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StocksAddForm {
+public class StockAddForm {
 
     @NotBlank
     @Size(min = 4, max = 4)
@@ -43,5 +43,7 @@ public class StocksAddForm {
     @Digits(integer = 8, fraction = 2)
     @DecimalMax(value = "99999999.99", inclusive = true)
     @DecimalMin(value = "00000000.00", inclusive = true)
-    private BigDecimal cutLossPrice;
+    private BigDecimal cutlossPrice;
+
+    private Integer userId;
 }
