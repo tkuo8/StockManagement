@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function StockRegister() {
+  const userId = 1;
   const [formData, setFormData] = useState({
-    userId: "1",
+    userId: userId,
     symbol: "",
     purchasePrice: "",
     quantity: "",
@@ -18,30 +20,36 @@ function StockRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/stocks", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.post(
+        "http://localhost:8080/api/stocks",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 成功時の処理
+      console.log("Data submitted successfully!");
+      setFormData({
+        userId: userId,
+        symbol: "",
+        purchasePrice: "",
+        quantity: "",
+        targetPrice: "",
+        cutlossPrice: "",
       });
-      if (response.ok) {
-        console.log("Data submitted successfully!");
-        setFormData({
-          userId: "1",
-          symbol: "",
-          purchasePrice: "",
-          quantity: "",
-          targetPrice: "",
-          cutlossPrice: "",
-        });
-      } else {
-        const errorText = await response.text();
+    } catch (error) {
+      // サーバーエラーの場合
+      if (error.response) {
+        const errorText = error.response.data || error.response.statusText;
         alert(`Validation error ${errorText}`);
         console.log("Failed to submit data.");
+      } else {
+        // ネットワークエラーや他のエラーの場合
+        console.error("Error occurred", error.message);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 
