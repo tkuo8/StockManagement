@@ -1,154 +1,162 @@
-# 株管理アプリ内部設計書
+# 株管理アプリ 内部設計書
 
-## 1. 目的
+## **1. 目的**
 
-本アプリケーションは、株式投資の効率的な管理を目的とし、ユーザーがリスク分散と資産の成長を目指すための支援ツールを提供します。アプリケーションは、株式の購入・売却履歴管理、目標設定、進捗の可視化、株価情報の自動取得を通じて、投資家が意思決定を合理的に行えるように設計されています。
+本アプリケーションは、株式投資の効率的な管理を目的とし、ユーザーがリスク分散と資産成長を目指すための支援ツールを提供します。株式の購入・売却履歴管理、目標設定、進捗の可視化、株価情報の自動取得を通じて、投資家が意思決定を合理的に行えるように設計されています。
 
 ---
 
-## 2. システム構成
+## **2. システム構成**
 
-システムは、以下の構成要素からなります：
+システムは以下の構成要素から成ります：
 
-- **フロントエンド**: React, Redux, Bootstrap
-- **バックエンド**: Java, Spring Boot
+- **フロントエンド**: React, Bootstrap
+- **バックエンド**: Java (Spring Boot)
 - **データベース**: MySQL
-- **外部 API**: 株価情報（Yahoo Finance API, Alpha Vantage API, Quandl API）
+- **外部 API**: Yahoo Finance API, Alpha Vantage API
 - **認証・認可**: JWT (JSON Web Token)
 
-ユーザーインターフェースは React で構築され、Redux を使った状態管理を行います。バックエンドは Spring Boot を使用し、株価データを外部 API から取得し、データベースに保存・管理します。
+React を使用してユーザーインターフェースを構築し、株価やテクニカル指標データは外部 API を通じて取得します。バックエンドでは RESTful API を提供し、データ管理を行います。
 
 ---
 
-## 3. データベース設計
+## **3. データベース設計**
 
-### 3.1 エンティティ設計
+### **3.1 エンティティ設計**
 
-#### 1. **User（ユーザー）テーブル**
+#### **1. User（ユーザー）テーブル**
 
-このテーブルは、アプリケーションに登録されたユーザーの情報を管理します。ユーザー認証のために必要な情報（ユーザー名、パスワード、メールアドレスなど）が格納されます。
+ユーザー情報を管理します。
 
-- `user_id` (INT, PK): ユーザーを一意に識別するための主キー。自動インクリメントされます。
-- `username` (VARCHAR(255)): ユーザーのログイン名。ユニークである必要があります。
-- `password` (VARCHAR(255)): ハッシュ化されたユーザーのパスワード。セキュリティのために暗号化します。
-- `email` (VARCHAR(255)): ユーザーのメールアドレス。ユニークである必要があります。
-- `created_at` (TIMESTAMP): ユーザーがアカウントを作成した日時。
-- `updated_at` (TIMESTAMP): ユーザー情報が最後に更新された日時。
-
-#### 2. **Stock（株情報）テーブル**
-
-このテーブルは、ユーザーが保有する株情報を管理します。各株の購入価格、数量、目標価格などが記録されます。
-
-- `stock_id` (INT, PK): 各株情報を一意に識別するための主キー。自動インクリメントされます。
-- `user_id` (INT, FK): この株情報を所有するユーザーの ID。`User`テーブルの`user_id`を参照します。
-- `symbol` (VARCHAR(10)): 株式のティッカーシンボル（例: AAPL, TSLA）。株を識別するためのユニークなコード。
-- `purchase_price` (DECIMAL(10,2)): ユーザーが株を購入した価格。
-- `quantity` (INT): ユーザーが保有している株式の数量。
-- `target_price` (DECIMAL(10,2)): ユーザーが設定した売却目標価格。
-- `cutloss_price` (DECIMAL(10,2)): ユーザーが設定した損切り価格。
-- `created_at` (TIMESTAMP): 株情報が登録された日時。
-- `updated_at` (TIMESTAMP): 株情報が最後に更新された日時。
-
-#### 3. **Transaction（取引履歴）テーブル**
-
-このテーブルは、ユーザーが行った株式の購入・売却履歴を管理します。取引日時や取引金額などの情報が記録されます。
-
-- `transaction_id` (INT, PK): 取引を一意に識別するための主キー。自動インクリメントされます。
-- `stock_id` (INT, FK): この取引に関連する株情報の ID。`Stock`テーブルの`stock_id`を参照します。
-- `type` (ENUM('BUY', 'SELL')): 取引のタイプ。株の購入または売却を示します。
-- `price` (DECIMAL(10,2)): 取引時の株価。
-- `quantity` (INT): 取引で売買された株式の数量。
-- `transaction_date` (TIMESTAMP): 取引が行われた日時。
-
-#### 4. **Alert（アラート設定）テーブル**
-
-このテーブルは、ユーザーが設定した株価アラートの情報を管理します。設定された株価が達成されたときに通知を行います。
-
-- `alert_id` (INT, PK): アラートを一意に識別するための主キー。自動インクリメントされます。
-- `user_id` (INT, FK): アラートを設定したユーザーの ID。`User`テーブルの`user_id`を参照します。
-- `stock_id` (INT, FK): アラートが設定された株情報の ID。`Stock`テーブルの`stock_id`を参照します。
-- `alert_type` (ENUM('PRICE', 'TARGET_REACHED')): アラートのタイプ。`PRICE`は株価が指定された価格に達したとき、`TARGET_REACHED`は設定した目標価格に達したときに通知されます。
-- `alert_value` (DECIMAL(10,2)): アラートが発動する株価の値。
-- `created_at` (TIMESTAMP): アラートが設定された日時。
-
-### 3.2 インデックス設計
-
-インデックスはデータの検索や参照を高速化するために設計されています。以下のインデックスを定義します：
-
-- **User テーブル**:
-
-  - `username`: ユーザー名での検索を高速化します。
-  - `email`: メールアドレスでの検索を高速化します。
-
-- **Stock テーブル**:
-
-  - `user_id`: ユーザーごとの株情報を検索するためのインデックス。
-  - `symbol`: 株ティッカーシンボルで株を検索するためのインデックス。
-
-- **Transaction テーブル**:
-
-  - `stock_id`: 特定の株に関連する取引を検索するためのインデックス。
-  - `transaction_date`: 取引日時を基に取引履歴を検索するためのインデックス。
-
-- **Alert テーブル**:
-  - `user_id`: ユーザーごとのアラート情報を検索するためのインデックス。
-  - `stock_id`: 特定の株に関連するアラートを検索するためのインデックス。
+- **user_id** (INT, PK): 主キー。自動インクリメント。
+- **email** (VARCHAR(255)): ユーザーのメールアドレス（ユニーク制約）。
+- **password** (VARCHAR(255)): ハッシュ化されたパスワード。
+- **created_at** (TIMESTAMP): 作成日時。
+- **updated_at** (TIMESTAMP): 更新日時。
 
 ---
 
-## 3.3 外部キー制約
+#### **2. Stock（株情報）テーブル**
 
-- `Stock.user_id` は `User.user_id` を参照する外部キーです。
-- `Transaction.stock_id` は `Stock.stock_id` を参照する外部キーです。
-- `Alert.user_id` は `User.user_id` を参照する外部キーです。
-- `Alert.stock_id` は `Stock.stock_id` を参照する外部キーです。
+保有株情報を管理します。
+
+- **stock_id** (INT, PK): 主キー。自動インクリメント。
+- **user_id** (INT, FK): ユーザー ID（`User`テーブル参照）。
+- **symbol** (VARCHAR(10)): 株式のティッカーシンボル。
+- **purchase_price** (DECIMAL(10,2)): 購入価格。
+- **quantity** (INT): 保有株数。
+- **target_price** (DECIMAL(10,2)): 売却目標価格。
+- **stop_loss_price** (DECIMAL(10,2)): 損切り価格。
+- **status** (VARCHAR(50)): 状態（例: "holding", "watching", "buy", "sell"）。
+- **created_at** (TIMESTAMP): 作成日時。
+- **updated_at** (TIMESTAMP): 更新日時。
 
 ---
 
-## 4. API 設計
+#### **3. Transaction（取引履歴）テーブル**
 
-### 4.1 ユーザー認証
+取引履歴を記録します。
 
-- **POST /login**
+- **transaction_id** (INT, PK): 主キー。自動インクリメント。
+- **stock_id** (INT, FK): 株情報 ID（`Stock`テーブル参照）。
+- **type** (ENUM('BUY', 'SELL')): 取引の種類。
+- **price** (DECIMAL(10,2)): 取引価格。
+- **quantity** (INT): 取引株数。
+- **transaction_date** (TIMESTAMP): 取引日時。
 
-  - **パラメータ**: `username`, `password`
-  - **レスポンス**: JWT トークン
+---
 
-- **POST /register**
-  - **パラメータ**: `username`, `password`, `email`
-  - **レスポンス**: ユーザー情報
+#### **4. Alert（アラート設定）テーブル**
 
-### 4.2 株情報管理
+アラート情報を管理します。
 
-- **GET /stocks**
+- **alert_id** (INT, PK): 主キー。自動インクリメント。
+- **user_id** (INT, FK): ユーザー ID（`User`テーブル参照）。
+- **stock_id** (INT, FK): 株情報 ID（`Stock`テーブル参照）。
+- **alert_type** (ENUM('PRICE', 'TARGET_REACHED')): アラートの種類。
+- **alert_value** (DECIMAL(10,2)): アラート基準値。
+- **created_at** (TIMESTAMP): 作成日時。
 
-  - **パラメータ**: `user_id`
-  - **レスポンス**: ユーザーの全株情報
+---
 
-- **POST /stocks**
+#### **5. Indicator（テクニカル指標）テーブル**
 
-  - **パラメータ**: `symbol`, `purchase_price`, `quantity`, `target_price`, `cut_loss_price`
-  - **レスポンス**: 登録した株情報
+各銘柄のテクニカル指標を記録します。
 
-- **PUT /stocks/{stock_id}**
+- **indicator_id** (INT, PK): 主キー。自動インクリメント。
+- **stock_id** (INT, FK): 株情報 ID（`Stock`テーブル参照）。
+- **indicator_name** (VARCHAR(50)): 指標名（例: "MACD", "RSI"）。
+- **value** (DECIMAL(10,2)): 指標値。
+- **calculated_at** (TIMESTAMP): 計算日時。
 
-  - **パラメータ**: `purchase_price`, `quantity`, `target_price`
-  - **レスポンス**: 更新された株情報
+---
 
-- **DELETE /stocks/{stock_id}**
-  - **パラメータ**: `stock_id`
-  - **レスポンス**: 削除された株情報
+### **3.2 インデックス設計**
 
-### 4.3 アラート管理
+- `User`テーブル: `email`列にユニークインデックス。
+- `Stock`テーブル: `user_id`列にインデックス。
+- `Transaction`テーブル: `stock_id`列、`transaction_date`列にインデックス。
+- `Alert`テーブル: `user_id`列、`stock_id`列にインデックス。
 
-- **GET /alerts**
+---
 
-  - **パラメータ**: `user_id`
-  - **レスポンス**: ユーザーの全アラート情報
+## **4. API 設計**
 
-- **POST /alerts**
-  - **パラメータ**: `user_id`, `stock_id`, `alert_type`, `alert_value`
-  - **レスポンス**: 登録したアラート情報
+### **4.1 株情報管理 API**
+
+#### **1. 登録**
+
+- **エンドポイント**: `POST /api/stocks`
+- **リクエスト**:
+  ```json
+  {
+    "symbol": "AAPL",
+    "purchase_price": 150.0,
+    "quantity": 10,
+    "target_price": 160.0,
+    "stop_loss_price": 140.0,
+    "status": "holding"
+  }
+  ```
+- **レスポンス**:
+  ```json
+  {
+    "stock_id": 1,
+    "symbol": "AAPL",
+    "purchase_price": 150.0,
+    "quantity": 10,
+    "target_price": 160.0,
+    "stop_loss_price": 140.0,
+    "status": "holding"
+  }
+  ```
+
+---
+
+### **4.2 アラート管理 API**
+
+#### **1. 設定**
+
+- **エンドポイント**: `POST /api/alerts`
+- **リクエスト**:
+  ```json
+  {
+    "user_id": 1,
+    "stock_id": 1,
+    "alert_type": "PRICE",
+    "alert_value": 145.0
+  }
+  ```
+- **レスポンス**:
+  ```json
+  {
+    "alert_id": 1,
+    "user_id": 1,
+    "stock_id": 1,
+    "alert_type": "PRICE",
+    "alert_value": 145.0
+  }
+  ```
 
 ---
 
