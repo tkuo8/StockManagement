@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jp.ramgap.backend.domain.stock.model.Stock;
 import jp.ramgap.backend.domain.stock.service.StockService;
 import jp.ramgap.backend.form.StockAddForm;
+import yahoofinance.YahooFinance;
 
 @RestController
 @RequestMapping("/api/stocks")
@@ -65,6 +66,19 @@ public class StockController {
     // public List<StockAddForm> getStocks() {
     // return stocks;
     public List<Stock> getStocks(@RequestParam int userId) {
+        List<Stock> myStocks = stockService.getStocksByUserId(userId);
+
+        for (Stock stock : myStocks) {
+            String symbol = stock.getSymbol();
+            try {
+                yahoofinance.Stock yfStock = YahooFinance.get(symbol + ".T");
+                System.out.println("企業名:" + yfStock.getName());
+                System.out.println("株価" + yfStock.getQuote().getPrice());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return stockService.getStocksByUserId(userId);
     }
 
