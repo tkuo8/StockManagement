@@ -54,51 +54,89 @@ function StockRegister() {
   };
 
   return (
-    <div>
-      <h2>株情報登録</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="symbol">銘柄コード</label>
-        <input
-          type="text"
-          name="symbol"
-          id="symbol"
-          value={formData.symbol}
-          onChange={handleChange}
-        />
-        <label htmlFor="purchasePrice">取得価格</label>
-        <input
-          type="text"
-          name="purchasePrice"
-          id="purchasePrice"
-          value={formData.purchasePrice}
-          onChange={handleChange}
-        />
-        <label htmlFor="quantity">保有株数</label>
-        <input
-          type="text"
-          name="quantity"
-          id="quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-        />
-        <label htmlFor="targetPrice">売却目標価格</label>
-        <input
-          type="text"
-          name="targetPrice"
-          id="targetPrice"
-          value={formData.targetPrice}
-          onChange={handleChange}
-        />
-        <label htmlFor="cutlossPrice">損切り価格</label>
-        <input
-          type="text"
-          name="cutlossPrice"
-          id="cutlossPrice"
-          value={formData.cutlossPrice}
-          onChange={handleChange}
-        />
-        <button type="submit">登録</button>
-      </form>
+    <div className="container mt-5">
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h2 className="card-title text-center text-primary mb-4">
+            株情報登録
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="symbol" className="form-label">
+                銘柄コード
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="symbol"
+                id="symbol"
+                value={formData.symbol}
+                onChange={handleChange}
+                placeholder="例： 1234"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="purchasePrice" className="form-label">
+                取得価格
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="purchasePrice"
+                id="purchasePrice"
+                value={formData.purchasePrice}
+                onChange={handleChange}
+                placeholder="例： 1000"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="quantity" className="form-label">
+                保有株数
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="quantity"
+                id="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                placeholder="例： 100"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="targetPrice" className="form-label">
+                売却目標価格
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="targetPrice"
+                id="targetPrice"
+                value={formData.targetPrice}
+                onChange={handleChange}
+                placeholder="例： 1500"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="cutlossPrice" className="form-label">
+                損切り価格
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="cutlossPrice"
+                id="cutlossPrice"
+                value={formData.cutlossPrice}
+                onChange={handleChange}
+                placeholder="例： 900"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100">
+              登録
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

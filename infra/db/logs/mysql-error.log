@@ -54,3 +54,16 @@
 2024-11-26T07:13:49.016997Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
 2024-11-26T07:13:49.105887Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
 2024-11-26T07:13:49.106215Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '9.1.0'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2024-11-28T05:11:07.319950Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 9.1.0).
+2024-11-28T05:11:09.567240Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 72  user: 'root'.
+2024-11-28T05:11:09.570125Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 80  user: 'root'.
+2024-11-28T05:11:09.571204Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 73  user: 'root'.
+2024-11-28T05:11:09.572816Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 74  user: 'root'.
+2024-11-28T05:11:09.579389Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 75  user: 'root'.
+2024-11-28T05:11:09.580368Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 76  user: 'root'.
+2024-11-28T05:11:09.582445Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 77  user: 'root'.
+2024-11-28T05:11:09.583409Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 78  user: 'root'.
+2024-11-28T05:11:09.585811Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 71  user: 'root'.
+2024-11-28T05:11:09.587695Z 0 [Warning] [MY-010909] [Server] /usr/sbin/mysqld: Forcing close of thread 79  user: 'root'.
+2024-11-28T05:11:12.581951Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 9.1.0)  MySQL Community Server - GPL.
+2024-11-28T05:11:12.584312Z 0 [System] [MY-015016] [Server] MySQL Server - end.

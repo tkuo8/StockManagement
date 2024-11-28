@@ -73,30 +73,42 @@ function Dashboard() {
   });
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <table>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : header.column.columnDef.header}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{cell.getValue()}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mt-5">
+      <div className="card shadow-">
+        <div className="card-body">
+          <h2 className="card-title text-center text-primary mb-4">
+            ダッシュボード
+          </h2>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover align-middle">
+              <thead className="table-primary">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id} className="text-center">
+                        {header.isPlaceholder
+                          ? null
+                          : header.column.columnDef.header}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="text-center">
+                        {cell.getValue()}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
