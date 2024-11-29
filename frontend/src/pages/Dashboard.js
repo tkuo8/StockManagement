@@ -7,7 +7,7 @@ function Dashboard() {
   const userId = 1;
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/stocks", { params: { userId } })
+      .get("http://localhost:5000/api/stocks", { params: { userId } })
       .then((response) => {
         setData(response.data);
       })
