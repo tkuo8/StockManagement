@@ -20,11 +20,11 @@ function Dashboard() {
   const columns = [
     {
       accessorKey: "symbol", // データキー
-      header: "銘柄コード", // ヘッダー名
+      header: "証券コード", // ヘッダー名
     },
     {
       accessorKey: "purchasePrice",
-      header: "購入価格",
+      header: "取得単価",
     },
     {
       accessorKey: "quantity",

@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function StockRegister() {
-  const userId = 1;
   const [formData, setFormData] = useState({
-    userId: userId,
     symbol: "",
     purchasePrice: "",
     quantity: "",
@@ -33,7 +31,6 @@ function StockRegister() {
       // 成功時の処理
       console.log("Data submitted successfully!");
       setFormData({
-        userId: userId,
         symbol: "",
         purchasePrice: "",
         quantity: "",
@@ -63,7 +60,7 @@ function StockRegister() {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="symbol" className="form-label">
-                銘柄コード
+                証券コード
               </label>
               <input
                 type="text"
@@ -77,7 +74,7 @@ function StockRegister() {
             </div>
             <div className="mb-3">
               <label htmlFor="purchasePrice" className="form-label">
-                取得価格
+                取得単価
               </label>
               <input
                 type="text"

@@ -650,3 +650,38 @@ Time                 Id Command    Argument
 2024-11-28T16:15:27.886218Z	    9 Query	select * from stocks where user_id = 1
 2024-11-28T16:16:07.102976Z	    9 Query	select * from stocks where user_id = 1
 2024-11-28T16:16:13.645098Z	    9 Query	select * from stocks where user_id = 1
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-11-29T06:50:10.531574Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-11-29T06:50:47.080937Z	    8 Connect	root@localhost on  using Socket
+2024-11-29T06:50:47.084364Z	    8 Query	select @@version_comment limit 1
+2024-11-29T06:50:55.237248Z	    8 Query	SELECT DATABASE()
+2024-11-29T06:50:55.239075Z	    8 Init DB	stockManagement
+2024-11-29T06:50:55.241518Z	    8 Query	show databases
+2024-11-29T06:50:55.255300Z	    8 Query	show tables
+2024-11-29T06:50:55.261815Z	    8 Query	SELECT * FROM `stocks` LIMIT 0
+2024-11-29T06:50:55.297010Z	    8 Query	SELECT * FROM `users` LIMIT 0
+2024-11-29T06:51:03.429929Z	    8 Query	show tables
+2024-11-29T06:51:13.523763Z	    8 Query	drop table users
+2024-11-29T06:51:27.713001Z	    8 Query	drop table stocks
+2024-11-29T06:51:34.040990Z	    8 Query	drop table users
+2024-11-29T06:51:57.790873Z	    8 Query	CREATE TABLE stocks (
+    stock_id INT AUTO_INCREMENT PRIMARY KEY,      -- 
+    symbol VARCHAR(10) NOT NULL,                  -- NULL
+    purchase_price DECIMAL(10,2) NOT NULL,        -- 
+    quantity INT NOT NULL,                        -- 
+    target_price DECIMAL(10,2),                   -- 
+    cutloss_price DECIMAL(10,2),                  -- 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 
+)
+2024-11-29T06:52:11.801708Z	    8 Query	show tables
