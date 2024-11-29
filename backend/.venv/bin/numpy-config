@@ -1,4 +1,4 @@
-#!/Users/tsuyoshi/myproject/StockManagement/backend/venv/bin/python
+#!/Users/tsuyoshi/myproject/StockManagement/backend/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
