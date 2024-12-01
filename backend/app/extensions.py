@@ -1,7 +1,8 @@
-# from flask_mysql_connector import MySQL
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-# mysql = MySQL()
+# SQLAlchemyのインスタンスを作成
+db = SQLAlchemy()
 
 def init_cors(app):
     CORS(app)

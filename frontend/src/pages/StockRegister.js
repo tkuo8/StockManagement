@@ -19,7 +19,7 @@ function StockRegister() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5100/api/stocks",
+        "http://localhost:50000/api/stocks",
         formData,
         {
           headers: {

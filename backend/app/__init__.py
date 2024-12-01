@@ -1,20 +1,20 @@
 from flask import Flask
-from .extensions import init_cors
-from .routes import main
+from .extensions import init_cors, db
+from app.routes import api
 
 def create_app():
     app = Flask(__name__)
 
     # アプリ設定
-    # app.config.from_object('app.config.Config')
+    app.config.from_object('app.config.Config')
 
-    # MySQLの初期化
-    # mysql.init_app(app)
+    # SQLAlchemyの初期化
+    db.init_app(app)
     
     # CORS初期化
     init_cors(app)
 
     # Blueprint登録
-    app.register_blueprint(main)
+    app.register_blueprint(api.bp)
 
     return app
