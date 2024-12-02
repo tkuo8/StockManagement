@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import init_cors, db
-from app.routes import api
+from .api import bp
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +15,6 @@ def create_app():
     init_cors(app)
 
     # Blueprint登録
-    app.register_blueprint(api.bp)
+    app.register_blueprint(bp)
 
     return app

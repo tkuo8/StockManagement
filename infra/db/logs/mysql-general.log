@@ -732,3 +732,94 @@ WHERE stocks.stock_id = 2
 2024-12-01T05:50:18.818316Z	   12 Query	ROLLBACK
 2024-12-01T05:50:34.807250Z	   11 Query	select * from stocks
 2024-12-01T05:51:37.103964Z	   11 Quit	
+2024-12-02T06:23:42.432274Z	   13 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-02T06:23:42.461154Z	   13 Query	SET NAMES utf8mb4
+2024-12-02T06:23:42.466249Z	   13 Query	SET AUTOCOMMIT = 0
+2024-12-02T06:23:42.469170Z	   13 Query	SET NAMES utf8mb4
+2024-12-02T06:23:42.473108Z	   13 Query	SELECT VERSION()
+2024-12-02T06:23:42.486474Z	   13 Query	SELECT DATABASE()
+2024-12-02T06:23:42.493783Z	   13 Query	SELECT @@transaction_isolation
+2024-12-02T06:23:42.498019Z	   13 Query	SELECT @@sql_mode
+2024-12-02T06:23:42.502505Z	   13 Query	SELECT @@lower_case_table_names
+2024-12-02T06:23:42.506370Z	   13 Query	ROLLBACK
+2024-12-02T06:23:42.528515Z	   13 Query	INSERT INTO stocks (symbol, purchase_price, quantity, target_price, cutloss_price, created_at, updated_at) VALUES ('1111', 111, 111, 111, 111, '2024-12-02 06:23:42.524209', '2024-12-02 06:23:42.524223')
+2024-12-02T06:23:42.560836Z	   13 Query	COMMIT
+2024-12-02T06:23:42.578142Z	   13 Query	ROLLBACK
+2024-12-02T06:23:42.595890Z	   13 Query	SELECT stocks.stock_id, stocks.symbol, stocks.purchase_price, stocks.quantity, stocks.target_price, stocks.cutloss_price, stocks.created_at, stocks.updated_at 
+FROM stocks 
+WHERE stocks.stock_id = 3
+2024-12-02T06:23:42.610063Z	   13 Query	ROLLBACK
+2024-12-02T06:23:42.611747Z	   13 Query	ROLLBACK
+2024-12-02T06:24:37.401073Z	   14 Connect	root@localhost on  using Socket
+2024-12-02T06:24:37.416356Z	   14 Query	select @@version_comment limit 1
+2024-12-02T06:24:45.206625Z	   14 Query	SELECT DATABASE()
+2024-12-02T06:24:45.209140Z	   14 Init DB	stockManagement
+2024-12-02T06:24:45.217752Z	   14 Query	show databases
+2024-12-02T06:24:45.241217Z	   14 Query	show tables
+2024-12-02T06:24:45.251803Z	   14 Query	SELECT * FROM `stocks` LIMIT 0
+2024-12-02T06:24:52.314837Z	   14 Query	select * from stocks
+2024-12-02T06:30:20.700328Z	   14 Query	show variables like '%time_zone%'
+2024-12-02T06:31:06.617897Z	   14 Quit	
+2024-12-02T06:37:22.253332Z	   15 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-02T06:37:22.264424Z	   15 Query	SET NAMES utf8mb4
+2024-12-02T06:37:22.270056Z	   15 Query	SET AUTOCOMMIT = 0
+2024-12-02T06:37:22.275261Z	   15 Query	SET NAMES utf8mb4
+2024-12-02T06:37:22.279759Z	   15 Query	SELECT VERSION()
+2024-12-02T06:37:22.300280Z	   15 Query	SELECT DATABASE()
+2024-12-02T06:37:22.306947Z	   15 Query	SELECT @@transaction_isolation
+2024-12-02T06:37:22.315502Z	   15 Query	SELECT @@sql_mode
+2024-12-02T06:37:22.323440Z	   15 Query	SELECT @@lower_case_table_names
+2024-12-02T06:37:22.325692Z	   15 Query	ROLLBACK
+2024-12-02T06:37:22.346430Z	   15 Query	INSERT INTO stocks (symbol, purchase_price, quantity, target_price, cutloss_price, created_at, updated_at) VALUES ('1234', 222, 222, 222, 222, '2024-12-02 15:37:22.346035', '2024-12-02 15:37:22.346048')
+2024-12-02T06:37:22.364221Z	   15 Query	COMMIT
+2024-12-02T06:37:22.381167Z	   15 Query	ROLLBACK
+2024-12-02T06:37:22.408879Z	   15 Query	SELECT stocks.stock_id, stocks.symbol, stocks.purchase_price, stocks.quantity, stocks.target_price, stocks.cutloss_price, stocks.created_at, stocks.updated_at 
+FROM stocks 
+WHERE stocks.stock_id = 4
+2024-12-02T06:37:22.415536Z	   15 Query	ROLLBACK
+2024-12-02T06:37:22.417227Z	   15 Query	ROLLBACK
+2024-12-02T06:38:40.014938Z	   16 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-02T06:38:40.018338Z	   16 Query	SET NAMES utf8mb4
+2024-12-02T06:38:40.020114Z	   16 Query	SET AUTOCOMMIT = 0
+2024-12-02T06:38:40.021481Z	   16 Query	SET NAMES utf8mb4
+2024-12-02T06:38:40.022846Z	   16 Query	SELECT VERSION()
+2024-12-02T06:38:40.025457Z	   16 Query	SELECT DATABASE()
+2024-12-02T06:38:40.027234Z	   16 Query	SELECT @@transaction_isolation
+2024-12-02T06:38:40.029040Z	   16 Query	SELECT @@sql_mode
+2024-12-02T06:38:40.032671Z	   16 Query	SELECT @@lower_case_table_names
+2024-12-02T06:38:40.034239Z	   16 Query	ROLLBACK
+2024-12-02T06:38:40.044525Z	   16 Query	INSERT INTO stocks (symbol, purchase_price, quantity, target_price, cutloss_price, created_at, updated_at) VALUES ('3333', 333, 333, 333, 333, '2024-12-02 15:38:40.043195', '2024-12-02 15:38:40.043203')
+2024-12-02T06:38:40.053380Z	   16 Query	COMMIT
+2024-12-02T06:38:40.060404Z	   16 Query	ROLLBACK
+2024-12-02T06:38:40.067731Z	   16 Query	SELECT stocks.stock_id, stocks.symbol, stocks.purchase_price, stocks.quantity, stocks.target_price, stocks.cutloss_price, stocks.created_at, stocks.updated_at 
+FROM stocks 
+WHERE stocks.stock_id = 5
+2024-12-02T06:38:40.072068Z	   16 Query	ROLLBACK
+2024-12-02T06:38:40.073599Z	   16 Query	ROLLBACK
+2024-12-02T06:39:19.853674Z	   17 Connect	root@localhost on  using Socket
+2024-12-02T06:39:19.857933Z	   17 Query	select @@version_comment limit 1
+2024-12-02T06:39:27.289742Z	   17 Query	SELECT DATABASE()
+2024-12-02T06:39:27.292402Z	   17 Init DB	stockManagement
+2024-12-02T06:39:27.298320Z	   17 Query	show databases
+2024-12-02T06:39:27.368802Z	   17 Query	show tables
+2024-12-02T06:39:27.374207Z	   17 Query	SELECT * FROM `stocks` LIMIT 0
+2024-12-02T06:39:34.521867Z	   17 Query	select * from stocks
+2024-12-02T06:39:52.905457Z	   18 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-02T06:39:52.908276Z	   18 Query	SET NAMES utf8mb4
+2024-12-02T06:39:52.910469Z	   18 Query	SET AUTOCOMMIT = 0
+2024-12-02T06:39:52.912354Z	   18 Query	SET NAMES utf8mb4
+2024-12-02T06:39:52.914170Z	   18 Query	SELECT VERSION()
+2024-12-02T06:39:52.916232Z	   18 Query	SELECT DATABASE()
+2024-12-02T06:39:52.918042Z	   18 Query	SELECT @@transaction_isolation
+2024-12-02T06:39:52.920157Z	   18 Query	SELECT @@sql_mode
+2024-12-02T06:39:52.923807Z	   18 Query	SELECT @@lower_case_table_names
+2024-12-02T06:39:52.925595Z	   18 Query	ROLLBACK
+2024-12-02T06:39:52.930126Z	   18 Query	INSERT INTO stocks (symbol, purchase_price, quantity, target_price, cutloss_price, created_at, updated_at) VALUES ('4444', 444, 444, 444, 444, '2024-12-02 15:39:52.929384', '2024-12-02 15:39:52.929393')
+2024-12-02T06:39:52.935378Z	   18 Query	COMMIT
+2024-12-02T06:39:52.941538Z	   18 Query	ROLLBACK
+2024-12-02T06:39:52.945280Z	   18 Query	SELECT stocks.stock_id, stocks.symbol, stocks.purchase_price, stocks.quantity, stocks.target_price, stocks.cutloss_price, stocks.created_at, stocks.updated_at 
+FROM stocks 
+WHERE stocks.stock_id = 6
+2024-12-02T06:39:52.948015Z	   18 Query	ROLLBACK
+2024-12-02T06:39:52.950096Z	   18 Query	ROLLBACK
+2024-12-02T06:40:14.672992Z	   17 Query	select * from stocks

@@ -1,6 +1,5 @@
-from app.models.stock import Stock
+from app.model import Stock
 from app.database import get_db
-from sqlalchemy.orm import Session
 from decimal import Decimal
 
 def create_stock(symbol: str, purchase_price: Decimal, quantity: int, target_price: Decimal, cutloss_price: Decimal) -> Stock:
