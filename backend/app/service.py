@@ -13,3 +13,12 @@ def create_stock(symbol: str, purchase_price: Decimal, quantity: int, target_pri
     except Exception as e:
         db.rollback()  # 失敗した場合はトランザクションをロールバック
         raise e  # 呼び出し元に例外を再送
+
+def read_all_stocks() -> list[Stock]:
+    try:
+        with get_db() as db:
+            stocks = db.query(Stock).all()
+            return stocks
+    except Exception as e:
+        print(f'error occured : {e}')
+        raise e

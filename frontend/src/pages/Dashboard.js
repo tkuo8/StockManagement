@@ -4,17 +4,16 @@ import axios from "axios";
 
 function Dashboard() {
   const [data, setData] = useState([]);
-  const userId = 1;
   useEffect(() => {
     axios
-      .get("http://localhost:5100/api/stocks", { params: { userId } })
+      .get("http://localhost:50000/api/stocks")
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
         console.error("Error fetching stock data", error);
       });
-  }, [userId]);
+  }, []);
 
   // カラム定義
   const columns = [
@@ -39,31 +38,6 @@ function Dashboard() {
       header: "損切り価格",
     },
   ];
-
-  // サンプルデータ
-  //   const data = [
-  //     {
-  //       symbol: "1234",
-  //       purchasePrice: 300,
-  //       quantity: 100,
-  //       targetPrice: 400,
-  //       cutlossPrice: 200,
-  //     },
-  //     {
-  //       symbol: "5678",
-  //       purchasePrice: 500,
-  //       quantity: 100,
-  //       targetPrice: 600,
-  //       cutlossPrice: 400,
-  //     },
-  //     {
-  //       symbol: "9101",
-  //       purchasePrice: 1000,
-  //       quantity: 100,
-  //       targetPrice: 1100,
-  //       cutlossPrice: 900,
-  //     },
-  //   ];
 
   // useReactTable フックを使用
   const table = useReactTable({

@@ -1,14 +1,21 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Spring Boot-BackendApplication<backend>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "jp.ramgap.backend.BackendApplication",
-            "projectName": "backend",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "configurations": [
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-BackendApplication<backend>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "jp.ramgap.backend.BackendApplication",
+      "projectName": "backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }

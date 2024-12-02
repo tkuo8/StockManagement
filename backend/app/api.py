@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.service import create_stock
+from app.service import create_stock, read_all_stocks
 from decimal import Decimal
 import pdb
 
@@ -17,9 +17,6 @@ def register_stock():
     
     data = request.json
     
-    # if not symbol or not purchase_price or not quantity or not target_price or not cutloss_price:
-    #     return jsonify({'error': 'All are required'}), 400
-
     try:
         create_stock(data['symbol'], Decimal(data['purchasePrice']), int(data['quantity']), Decimal(data['targetPrice']), Decimal(data['cutlossPrice']))
         return jsonify({'message': 'Stock created successfully'}), 201
@@ -27,14 +24,14 @@ def register_stock():
         return jsonify({"error": str(e)}), 400
     
 # READ
-# @main.route('/users', methods=['GET'])
-# def get_users():
-#     cursor = mysql.connection.cursor(dictionary=True)
-#     cursor.execute("SELECT * FROM users")
-#     users = cursor.fetchall()
-#     cursor.close()
-    
-#     return jsonify(users), 200
+@bp.route('/stocks', methods=['GET'])
+def get_all_stocks():
+    # pdb.set_trace()
+    try:
+        stocks = read_all_stocks()
+        return jsonify([stock.to_camel_case_dict() for stock in stocks]), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 # # UPDATE
 # @main.route('/users/<int:user_id>', methods=['PUT'])

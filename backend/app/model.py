@@ -15,3 +15,16 @@ class Stock(db.Model):
 
     def __repr__(self):
         return f"<Stock(stock_id={self.stock_id}, symbol='{self.symbol}', purchase_price={self.purchase_price}, quantity={self.quantity})>"
+
+    # 辞書形式に変換するメソッド（JSONにするために、キーをキャメルケースに変換）
+    def to_camel_case_dict(self):
+        def snake_to_camel(snake_str):
+            components = snake_str.split('_')
+            return components[0] + ''.join(x.title() for x in components[1:])
+        return {
+            snake_to_camel("symbol"): self.symbol,
+            snake_to_camel("purchase_price"): self.purchase_price,
+            snake_to_camel("quantity"): self.quantity,
+            snake_to_camel("target_price"): self.target_price,
+            snake_to_camel("cutloss_price"): self.cutloss_price,
+        }
