@@ -22,6 +22,10 @@ function Dashboard() {
       header: "証券コード", // ヘッダー名
     },
     {
+      accessorKey: "companyName",
+      header: "企業名",
+    },
+    {
       accessorKey: "purchasePrice",
       header: "取得単価",
     },
@@ -36,6 +40,22 @@ function Dashboard() {
     {
       accessorKey: "cutlossPrice",
       header: "損切り価格",
+    },
+    {
+      accessorKey: "currentPrice",
+      header: "現在価格",
+    },
+    {
+      accessorKey: "reachTargetPrice",
+      header: "目標まであと",
+    },
+    {
+      accessorKey: "leftCutlossPrice",
+      header: "損切り額まであと",
+    },
+    {
+      accessorKey: "profitAndLoss",
+      header: "損益額",
     },
   ];
 

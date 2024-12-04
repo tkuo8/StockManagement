@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.service import create_stock, read_all_stocks
+from app.service import create_stock, get_finance_data_list
 from decimal import Decimal
 import pdb
 
@@ -28,8 +28,9 @@ def register_stock():
 def get_all_stocks():
     # pdb.set_trace()
     try:
-        stocks = read_all_stocks()
-        return jsonify([stock.to_camel_case_dict() for stock in stocks]), 200
+        finance_data = get_finance_data_list()
+        json_data = jsonify(finance_data)
+        return json_data, 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 

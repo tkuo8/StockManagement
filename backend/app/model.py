@@ -22,9 +22,9 @@ class Stock(db.Model):
             components = snake_str.split('_')
             return components[0] + ''.join(x.title() for x in components[1:])
         return {
-            snake_to_camel("symbol"): self.symbol,
-            snake_to_camel("purchase_price"): self.purchase_price,
-            snake_to_camel("quantity"): self.quantity,
-            snake_to_camel("target_price"): self.target_price,
-            snake_to_camel("cutloss_price"): self.cutloss_price,
+            snake_to_camel('symbol'): self.symbol,
+            snake_to_camel('purchase_price'): self.purchase_price,
+            snake_to_camel('quantity'): self.quantity,
+            snake_to_camel('target_price'): self.target_price,
+            snake_to_camel('cutloss_price'): self.cutloss_price,
         }
