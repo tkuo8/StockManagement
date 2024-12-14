@@ -1,30 +1,73 @@
-from app.extensions import db
-from datetime import datetime
+from sqlalchemy import (
+    Column, Integer, Numeric, Date, DateTime, String, Enum as SQLAlchemyEnum, ForeignKey
+)
+from sqlalchemy.sql import func
+from .database import db
+from enum import Enum
 
+class StockStatus(Enum):
+    HOLDING="holding"
+    WATCHING="watching"
+    BUY="buy"
+    SELL="sell"
+    DISABLED="disabled"
+
+class TransactionType(Enum):
+    BUY="buy"
+    SELL="sell"
+
+# stocksテーブルの定義
 class Stock(db.Model):
     __tablename__ = 'stocks'
 
-    stock_id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 主キー、自動インクリメント
-    symbol = db.Column(db.String(10), nullable=False)  # ティッカーシンボル、NULL不可
-    purchase_price = db.Column(db.Numeric(10, 2), nullable=False)  # 取得単価
-    quantity = db.Column(db.Integer, nullable=False)  # 保有株数
-    target_price = db.Column(db.Numeric(10, 2), nullable=True)  # 売却目標価格
-    cutloss_price = db.Column(db.Numeric(10, 2), nullable=True)  # 損切り価格
-    created_at = db.Column(db.DateTime, default=datetime.now)  # 登録日時、デフォルトで現在日時
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  # 更新日時、更新時に自動更新
+    stock_id = db.Column(Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(String(10), nullable=False)
+    purchase_price = db.Column(Numeric(10, 2), nullable=False)
+    quantity = db.Column(Integer, nullable=False)
+    target_price = db.Column(Numeric(10, 2), nullable=False)
+    stop_loss_price = db.Column(Numeric(10, 2), nullable=False)
+    status = db.Column(SQLAlchemyEnum(StockStatus), nullable=False)
+    created_at = db.Column(DateTime, nullable=False, server_default=func.now())
+    updated_at = db.Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
 
-    def __repr__(self):
-        return f"<Stock(stock_id={self.stock_id}, symbol='{self.symbol}', purchase_price={self.purchase_price}, quantity={self.quantity})>"
+# transactionsテーブルの定義
+class Transaction(db.Model):
+    __tablename__ = 'transactions'
 
-    # 辞書形式に変換するメソッド（JSONにするために、キーをキャメルケースに変換）
-    def to_camel_case_dict(self):
-        def snake_to_camel(snake_str):
-            components = snake_str.split('_')
-            return components[0] + ''.join(x.title() for x in components[1:])
-        return {
-            snake_to_camel('symbol'): self.symbol,
-            snake_to_camel('purchase_price'): self.purchase_price,
-            snake_to_camel('quantity'): self.quantity,
-            snake_to_camel('target_price'): self.target_price,
-            snake_to_camel('cutloss_price'): self.cutloss_price,
-        }
+    transaction_id = db.Column(Integer, primary_key=True, autoincrement=True)
+    stock_id = db.Column(Integer, ForeignKey('stocks.stock_id'), nullable=False)
+    transaction_type = db.Column(SQLAlchemyEnum(TransactionType), nullable=False)
+    price = db.Column(Numeric(10, 2), nullable=False)
+    quantity = db.Column(Integer, nullable=False)
+    profit_loss = db.Column(Numeric(10, 2), nullable=True)
+    transaction_date = db.Column(DateTime, nullable=False)
+
+    stock = db.relationship("Stock", back_populates="transactions")
+
+Stock.transactions = db.relationship("Transaction", order_by=Transaction.transaction_id, back_populates="stock")
+
+# goal_progressテーブルの定義
+class GoalProgress(db.Model):
+    __tablename__ = 'goal_progress'
+
+    goal_id = db.Column(Integer, primary_key=True, autoincrement=True)
+    traded_at = db.Column(Date, nullable=False)
+    progress_rate = db.Column(Numeric(5, 2), nullable=False)
+    period = db.Column(Integer, ForeignKey('goal_periods.period_id'), nullable=False)
+    created_at = db.Column(DateTime, nullable=False, server_default=func.now())
+    updated_at = db.Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
+
+# goal_periodsテーブルの定義
+class GoalPeriod(db.Model):
+    __tablename__ = 'goal_periods'
+
+    period_id = db.Column(Integer, primary_key=True, autoincrement=True)
+    target_amount = db.Column(Numeric(10, 2), nullable=False)
+    started_at = db.Column(Date, nullable=False)
+    ended_at = db.Column(Date, nullable=False)
+    created_at = db.Column(DateTime, nullable=False, server_default=func.now())
+    updated_at = db.Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
+
+    progress = db.relationship("GoalProgress", back_populates="period_data")
+
+GoalProgress.period_data = db.relationship("GoalPeriod", back_populates="progress")

@@ -1884,3 +1884,161 @@ FROM stocks
 2024-12-03T07:00:24.838022Z	   93 Query	ROLLBACK
 2024-12-03T07:00:24.839540Z	   93 Query	ROLLBACK
 2024-12-04T01:26:10.698584Z	   57 Quit	
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-12-04T08:23:12.054981Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-12-08T03:47:10.947225Z	    8 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T03:47:11.088598Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T03:47:11.100885Z	    8 Query	SET AUTOCOMMIT = 0
+2024-12-08T03:47:11.104027Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T03:47:11.131830Z	    8 Query	SELECT VERSION()
+2024-12-08T03:47:11.165715Z	    8 Query	SELECT DATABASE()
+2024-12-08T03:47:11.170817Z	    8 Query	SELECT @@transaction_isolation
+2024-12-08T03:47:11.175717Z	    8 Query	SELECT @@sql_mode
+2024-12-08T03:47:11.181079Z	    8 Query	SELECT @@lower_case_table_names
+2024-12-08T03:47:11.188654Z	    8 Query	ROLLBACK
+2024-12-08T03:47:11.199138Z	    8 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T03:47:11.506681Z	    8 Query	ROLLBACK
+2024-12-08T03:47:11.508418Z	    8 Query	ROLLBACK
+2024-12-08T03:48:19.103644Z	    9 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T03:48:19.108718Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T03:48:19.111119Z	    9 Query	SET AUTOCOMMIT = 0
+2024-12-08T03:48:19.113262Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T03:48:19.115420Z	    9 Query	SELECT VERSION()
+2024-12-08T03:48:19.118252Z	    9 Query	SELECT DATABASE()
+2024-12-08T03:48:19.120929Z	    9 Query	SELECT @@transaction_isolation
+2024-12-08T03:48:19.125201Z	    9 Query	SELECT @@sql_mode
+2024-12-08T03:48:19.128158Z	    9 Query	SELECT @@lower_case_table_names
+2024-12-08T03:48:19.131219Z	    9 Query	ROLLBACK
+2024-12-08T03:48:19.135236Z	    9 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T03:48:19.143177Z	    9 Query	ROLLBACK
+2024-12-08T03:48:19.148025Z	    9 Query	ROLLBACK
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-12-08T04:20:02.229062Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-12-08T07:29:35.549188Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-12-08T07:30:00.581587Z	    8 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T07:30:00.583792Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T07:30:00.586205Z	    8 Query	SET AUTOCOMMIT = 0
+2024-12-08T07:30:00.588826Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T07:30:00.591561Z	    8 Query	SELECT VERSION()
+2024-12-08T07:30:00.601763Z	    8 Query	SELECT DATABASE()
+2024-12-08T07:30:00.606851Z	    8 Query	SELECT @@transaction_isolation
+2024-12-08T07:30:00.609762Z	    8 Query	SELECT @@sql_mode
+2024-12-08T07:30:00.612650Z	    8 Query	SELECT @@lower_case_table_names
+2024-12-08T07:30:00.615441Z	    8 Query	ROLLBACK
+2024-12-08T07:30:00.633314Z	    8 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T07:30:00.660179Z	    8 Query	ROLLBACK
+2024-12-08T07:30:00.661632Z	    8 Query	ROLLBACK
+2024-12-08T07:30:25.135243Z	    9 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T07:30:25.137130Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T07:30:25.138804Z	    9 Query	SET AUTOCOMMIT = 0
+2024-12-08T07:30:25.143869Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T07:30:25.145940Z	    9 Query	SELECT VERSION()
+2024-12-08T07:30:25.151068Z	    9 Query	SELECT DATABASE()
+2024-12-08T07:30:25.155635Z	    9 Query	SELECT @@transaction_isolation
+2024-12-08T07:30:25.160874Z	    9 Query	SELECT @@sql_mode
+2024-12-08T07:30:25.163519Z	    9 Query	SELECT @@lower_case_table_names
+2024-12-08T07:30:25.166992Z	    9 Query	ROLLBACK
+2024-12-08T07:30:25.171986Z	    9 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T07:30:25.178405Z	    9 Query	ROLLBACK
+2024-12-08T07:30:25.180174Z	    9 Query	ROLLBACK
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-12-08T07:31:52.341446Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'
+2024-12-08T07:32:23.651266Z	    8 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T07:32:23.654609Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T07:32:23.657448Z	    8 Query	SET AUTOCOMMIT = 0
+2024-12-08T07:32:23.659083Z	    8 Query	SET NAMES utf8mb4
+2024-12-08T07:32:23.660530Z	    8 Query	SELECT VERSION()
+2024-12-08T07:32:23.663723Z	    8 Query	SELECT DATABASE()
+2024-12-08T07:32:23.665642Z	    8 Query	SELECT @@transaction_isolation
+2024-12-08T07:32:23.669505Z	    8 Query	SELECT @@sql_mode
+2024-12-08T07:32:23.673278Z	    8 Query	SELECT @@lower_case_table_names
+2024-12-08T07:32:23.677783Z	    8 Query	ROLLBACK
+2024-12-08T07:32:23.689728Z	    8 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T07:32:23.721535Z	    8 Query	ROLLBACK
+2024-12-08T07:32:23.724078Z	    8 Query	ROLLBACK
+2024-12-08T07:33:21.500411Z	    9 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-08T07:33:21.508702Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T07:33:21.511310Z	    9 Query	SET AUTOCOMMIT = 0
+2024-12-08T07:33:21.513821Z	    9 Query	SET NAMES utf8mb4
+2024-12-08T07:33:21.516477Z	    9 Query	SELECT VERSION()
+2024-12-08T07:33:21.520444Z	    9 Query	SELECT DATABASE()
+2024-12-08T07:33:21.524434Z	    9 Query	SELECT @@transaction_isolation
+2024-12-08T07:33:21.530623Z	    9 Query	SELECT @@sql_mode
+2024-12-08T07:33:21.534973Z	    9 Query	SELECT @@lower_case_table_names
+2024-12-08T07:33:21.541590Z	    9 Query	ROLLBACK
+2024-12-08T07:33:21.548022Z	    9 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-08T07:33:21.555366Z	    9 Query	ROLLBACK
+2024-12-08T07:33:21.557494Z	    9 Query	ROLLBACK
+2024-12-13T03:00:20.770556Z	   10 Connect	root@192.168.65.1 on stockManagement using TCP/IP
+2024-12-13T03:00:20.814885Z	   10 Query	SET NAMES utf8mb4
+2024-12-13T03:00:20.827491Z	   10 Query	SET AUTOCOMMIT = 0
+2024-12-13T03:00:20.830985Z	   10 Query	SET NAMES utf8mb4
+2024-12-13T03:00:20.836574Z	   10 Query	SELECT VERSION()
+2024-12-13T03:00:20.858794Z	   10 Query	SELECT DATABASE()
+2024-12-13T03:00:20.882994Z	   10 Query	SELECT @@transaction_isolation
+2024-12-13T03:00:20.886483Z	   10 Query	SELECT @@sql_mode
+2024-12-13T03:00:20.888393Z	   10 Query	SELECT @@lower_case_table_names
+2024-12-13T03:00:20.890025Z	   10 Query	ROLLBACK
+2024-12-13T03:00:20.948045Z	   10 Query	SELECT stocks.stock_id AS stocks_stock_id, stocks.symbol AS stocks_symbol, stocks.purchase_price AS stocks_purchase_price, stocks.quantity AS stocks_quantity, stocks.target_price AS stocks_target_price, stocks.cutloss_price AS stocks_cutloss_price, stocks.created_at AS stocks_created_at, stocks.updated_at AS stocks_updated_at 
+FROM stocks
+2024-12-13T03:00:21.018380Z	   10 Query	ROLLBACK
+2024-12-13T03:00:21.028010Z	   10 Query	ROLLBACK
+/usr/sbin/mysqld, Version: 9.1.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2024-12-13T15:56:23.349609Z	    0 Execute	CREATE TABLE performance_schema.innodb_redo_log_files(
+`FILE_ID` BIGINT NOT NULL COMMENT 'Id of the file.',
+`FILE_NAME` VARCHAR(2000) NOT NULL COMMENT 'Path to the file.',
+`START_LSN` BIGINT NOT NULL COMMENT 'LSN of the first block in the file.',
+`END_LSN` BIGINT NOT NULL COMMENT 'LSN after the last block in the file.',
+`SIZE_IN_BYTES` BIGINT NOT NULL COMMENT 'Size of the file (in bytes).',
+`IS_FULL` TINYINT NOT NULL COMMENT '1 iff file has no free space inside.',
+`CONSUMER_LEVEL` INT NOT NULL COMMENT 'All redo log consumers registered on smaller levels than this value, have already consumed this file.'
+)engine = 'performance_schema'

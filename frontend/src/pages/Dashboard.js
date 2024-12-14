@@ -38,7 +38,7 @@ function Dashboard() {
       header: "目標価格",
     },
     {
-      accessorKey: "cutlossPrice",
+      accessorKey: "stopLossPrice",
       header: "損切り価格",
     },
     {
@@ -50,7 +50,7 @@ function Dashboard() {
       header: "目標まであと",
     },
     {
-      accessorKey: "leftCutlossPrice",
+      accessorKey: "leftStopLossPrice",
       header: "損切り額まであと",
     },
     {
@@ -68,8 +68,11 @@ function Dashboard() {
 
   return (
     <div className="container mt-5">
-      <div className="card shadow-">
-        <div className="card-body">
+      <div className="card shadow" style={{ height: "400px" }}>
+        <div
+          className="card-body"
+          style={{ overflowY: "auto", maxHeight: "350px" }}
+        >
           <h2 className="card-title text-center text-primary mb-4">
             ダッシュボード
           </h2>
@@ -106,5 +109,7 @@ function Dashboard() {
     </div>
   );
 }
+
+function targetRate() {}
 
 export default Dashboard;

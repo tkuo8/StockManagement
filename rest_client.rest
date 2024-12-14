@@ -1,12 +1,13 @@
-POST http://localhost:5000/api/stocks HTTP/1.1
+POST http://localhost:50000/api/stocks HTTP/1.1
 content-type: application/json
 
 {
-    "symbol": "0123",
+    "symbol": "7203",
     "purchasePrice": "1000",
     "quantity": "100",
     "targetPrice": "1100",
-    "cutlossPrice": "900"
+    "stopLossPrice": "900",
+    "status": "holding"
 }
 
 ###
