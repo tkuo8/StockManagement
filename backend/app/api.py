@@ -1,5 +1,8 @@
 from flask import Blueprint, request, jsonify
-from app.service import create_stock, get_finance_data_dict
+from .service import (
+    create_stock,
+    get_finance_data_dict,
+)
 from decimal import Decimal
 import pdb
 from .model import StockStatus
@@ -44,6 +47,17 @@ def get_all_stocks():
         return json_data, 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+
+# 個別株グラフデータ
+# @bp.route("/stocks/individual_graph", methods=["GET"])
+# def get_individual_graph_data():
+#     try:
+#         ohlc_data = get_individual_stock_graph_dataframe("7203")
+#         json_data = ohlc_data.reset_index().to_json(orient="records")
+#         return jsonify(json_data), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 400
 
 
 # # UPDATE

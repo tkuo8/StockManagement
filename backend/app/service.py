@@ -4,6 +4,7 @@ from decimal import Decimal
 import yfinance as yf
 import pdb
 from .util import model_to_dict
+from datetime import datetime, timedelta
 
 
 def create_stock(
@@ -61,6 +62,7 @@ def get_finance_data_dict():
         stock_dict = model_to_dict(stock)
         finance_data = get_current_price_and_company_name(stock.symbol)
         current_price = Decimal(finance_data["current_price"])
+        history_dict = get_individual_stock_history_dict(stock.symbol)
         digits = Decimal("0.01")
         return_data.append(
             {
@@ -76,6 +78,19 @@ def get_finance_data_dict():
                     (current_price - stock_dict["purchase_price"])
                     * stock_dict["quantity"]
                 ).quantize(digits),
+                **history_dict,
             }
         )
     return return_data
+
+
+def get_individual_stock_history_dict(symbol):
+    # 直近２週間のデータを取得
+    ticker = yf.Ticker(symbol + ".T")
+    history = ticker.history(period="1mo")
+    history_data = history[["Open", "Close", "High", "Low"]].reset_index()
+    history_data["Date"] = history_data["Date"].dt.strftime(
+        "%Y-%m-%d"
+    )  # 日付フォーマット変換
+
+    return {"history": history_data.to_dict(orient="records")}
