@@ -66,6 +66,7 @@ def get_finance_data_dict():
         digits = Decimal("0.01")
         return_data.append(
             {
+                "stock_id": stock_dict["stock_id"],
                 **stock_dict,
                 **finance_data,
                 "reach_target_price": Decimal(
@@ -94,3 +95,32 @@ def get_individual_stock_history_dict(symbol):
     )  # 日付フォーマット変換
 
     return {"history": history_data.to_dict(orient="records")}
+
+
+def update_stock(
+    stock_id: int,
+    purchase_price: Decimal,
+    quantity: int,
+    target_price: Decimal,
+    stop_loss_price: Decimal,
+):
+    # 更新対象の行を取得
+    try:
+        stock = Stock.query.get(stock_id)
+
+        if stock is None:
+            return f"Stock with id {stock_id} not found"
+
+        # 属性を変更
+        stock.stock_id = stock_id
+        stock.purchase_price = purchase_price
+        stock.quantity = quantity
+        stock.target_price = target_price
+        stock.stop_loss_price = stop_loss_price
+
+        # データベースに保存
+        db.session.commit()
+        return Stock.query.get(stock_id)
+    except Exception as e:
+        db.session.rollback()
+        return f"Error occurred: {e}"

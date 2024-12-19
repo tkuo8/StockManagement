@@ -35,7 +35,7 @@ function StockRegister() {
         purchasePrice: "",
         quantity: "",
         targetPrice: "",
-        cutlossPrice: "",
+        stopLossPrice: "",
       });
     } catch (error) {
       // サーバーエラーの場合
@@ -115,15 +115,15 @@ function StockRegister() {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="cutlossPrice" className="form-label">
+              <label htmlFor="stopLossPrice" className="form-label">
                 損切り価格
               </label>
               <input
                 type="text"
                 className="form-control"
-                name="cutlossPrice"
-                id="cutlossPrice"
-                value={formData.cutlossPrice}
+                name="stopLossPrice"
+                id="stopLossPrice"
+                value={formData.stopLossPrice}
                 onChange={handleChange}
                 placeholder="例： 900"
               />

@@ -13,3 +13,15 @@ content-type: application/json
 ###
 
 GET http://localhost:50000/api/stocks HTTP/1.1
+
+###
+
+PUT http://localhost:50000/api/stocks/1 HTTP/1.1
+content-type: application/json
+
+{
+    "purchasePrice": "2000",
+    "quantity": "200",
+    "targetPrice": "2800",
+    "stopLossPrice": "2600"
+}
