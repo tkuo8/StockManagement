@@ -121,7 +121,7 @@ function Mainboard() {
     },
     {
       accessorKey: "history",
-      header: "1ヶ月の推移",
+      header: "2ヶ月の推移",
       cell: ({ getValue, row }) => (
         <div style={{ height: "300px" }}>
           <CandlestickChart

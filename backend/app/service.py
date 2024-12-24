@@ -7,6 +7,10 @@ from .util import model_to_dict
 from datetime import datetime, timedelta
 import pandas as pd
 
+###
+# DB操作
+###
+
 
 def create_stock(
     symbol: str,
@@ -38,78 +42,6 @@ def read_all_stocks() -> list[Stock]:
         raise e
 
 
-def get_current_price_and_company_name(symbol):
-    # yfinanceでデータを取得
-    ticker = yf.Ticker(symbol + ".T")
-    try:
-        current_price = ticker.info.get("currentPrice", "0.0")
-        company_name = ticker.info.get("longName", "情報がありません")
-        # pdb.set_trace()
-        return {"current_price": current_price, "company_name": company_name}
-    except Exception as e:
-        print(f"データ取得中にエラーが発生しました: {e}")
-
-
-def get_all_finance_data_dict():
-    # pdb.set_trace()
-    return_data = []
-    stocks = read_all_stocks()
-    for stock in stocks:
-        # pdb.set_trace()
-        stock_dict = model_to_dict(stock)
-        finance_data = get_current_price_and_company_name(stock.symbol)
-        current_price = Decimal(finance_data["current_price"])
-        history_dict = get_individual_stock_history_dict(stock.symbol)
-        digits = Decimal("0.01")
-        return_data.append(
-            {
-                "stock_id": stock_dict["stock_id"],
-                **stock_dict,
-                **finance_data,
-                "profit_and_loss": Decimal(
-                    (current_price - stock_dict["purchase_price"])
-                    * stock_dict["quantity"]
-                ).quantize(digits),
-                **history_dict,
-            }
-        )
-    return return_data
-
-
-def get_one_finance_data_dict(stock_id):
-    # pdb.set_trace()
-    stock = Stock.query.get(stock_id)
-    stock_dict = model_to_dict(stock)
-    finance_data = get_current_price_and_company_name(stock.symbol)
-    current_price = Decimal(finance_data["current_price"])
-    history_dict = get_individual_stock_history_dict(stock.symbol)
-    digits = Decimal("0.01")
-    return_data = {
-        "stock_id": stock_dict["stock_id"],
-        **stock_dict,
-        **finance_data,
-        "profit_and_loss": Decimal(
-            (current_price - stock_dict["purchase_price"]) * stock_dict["quantity"]
-        ).quantize(digits),
-        **history_dict,
-    }
-    return return_data
-
-
-# TODO データ取得して返すのと、辞書データに変換するのはわけること。
-def get_individual_stock_history_dict(symbol):
-    # 直近3ヶ月のデータを取得
-    ticker = yf.Ticker(symbol + ".T")
-    history = ticker.history(period="3mo")
-    history = history.dropna(subset=["Open", "Close", "High", "Low"])
-    history_data = history[["Open", "Close", "High", "Low"]].reset_index()
-    history_data["Date"] = history_data["Date"].dt.strftime(
-        "%Y-%m-%d"
-    )  # 日付フォーマット変換
-
-    return {"history": history_data.to_dict(orient="records")}
-
-
 def update_stock(
     stock_id: int,
     purchase_price: Decimal,
@@ -135,6 +67,83 @@ def update_stock(
     except Exception as e:
         db.session.rollback()
         return f"Error occurred: {e}"
+
+
+###
+# 表示データ作成
+###
+
+
+def get_all_finance_data_dict():
+    # pdb.set_trace()
+    return_data = []
+    stocks = read_all_stocks()
+    for stock in stocks:
+        # pdb.set_trace()
+        stock_dict = model_to_dict(stock)
+        finance_data = create_finance_data(stock_dict)
+        return_data.append(finance_data)
+    return return_data
+
+
+def get_one_finance_data_dict(stock_id):
+    # pdb.set_trace()
+    stock = Stock.query.get(stock_id)
+    stock_dict = model_to_dict(stock)
+    return_data = create_finance_data(stock_dict)
+    return return_data
+
+
+def create_finance_data(stock_dict):
+    ticker = yf.Ticker(stock_dict["symbol"] + ".T")
+
+    price_and_name = get_current_price_and_company_name(ticker)
+
+    history = get_individual_stock_history(ticker)
+    history_dict = history_to_dict_for_plot_period(history)
+
+    finance_data = {
+        "stock_id": stock_dict["stock_id"],
+        **stock_dict,
+        **price_and_name,
+        "profit_and_loss": Decimal(
+            (Decimal(price_and_name["current_price"]) - stock_dict["purchase_price"])
+            * stock_dict["quantity"]
+        ).quantize(Decimal("0.01")),
+        **history_dict,
+    }
+    return finance_data
+
+
+def get_current_price_and_company_name(ticker):
+    # yfinanceでデータを取得
+    try:
+        current_price = ticker.info.get("currentPrice", "0.0")
+        company_name = ticker.info.get("longName", "情報がありません")
+        # pdb.set_trace()
+        return {"current_price": current_price, "company_name": company_name}
+    except Exception as e:
+        print(f"データ取得中にエラーが発生しました: {e}")
+
+
+def get_individual_stock_history(ticker):
+    # 直近3ヶ月のデータを取得
+    history = ticker.history(period="3mo")
+    history = history.dropna(subset=["Open", "Close", "High", "Low"])
+    return history
+
+
+# プロットするのは直近1ヶ月のデータなので、その分だけのhistoryを得る
+def history_to_dict_for_plot_period(history: pd.DataFrame):
+    one_month_ago = pd.Timestamp.now(tz="Asia/Tokyo") - pd.Timedelta(days=60)
+    recent_one_month_history = history[history.index >= one_month_ago]
+    return_history = recent_one_month_history[
+        ["Open", "Close", "High", "Low"]
+    ].reset_index()
+    return_history["Date"] = return_history["Date"].dt.strftime(
+        "%Y-%m-%d"
+    )  # 日付フォーマット変換
+    return {"history": return_history.to_dict(orient="records")}
 
 
 def calculate_moving_avarage(close_history: pd.Series, short_window, long_window):

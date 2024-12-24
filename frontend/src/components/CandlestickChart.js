@@ -59,9 +59,15 @@ const CandlestickChart = ({ history, stopLossPrice }) => {
             borderColor: "black",
             borderWidth: 1,
             barThickness: 5,
-            color: {
-              up: "rgba(200, 0, 0, 1)",
-              down: "rgba(0, 200, 0, 1)",
+            backgroundColors: {
+              up: "#ff9999",
+              down: "#90ee90",
+              unchanged: "#696969",
+            },
+            borderColors: {
+              up: "#ff9999",
+              down: "#90ee90",
+              unchanged: "#696969",
             },
             categoryPercentage: 0.4,
           },
