@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function StockRegister() {
   const [formData, setFormData] = useState({
     symbol: "",
     purchasePrice: "",
     quantity: "",
-    targetPrice: "",
     cutlossPrice: "",
   });
 
@@ -34,7 +34,6 @@ function StockRegister() {
         symbol: "",
         purchasePrice: "",
         quantity: "",
-        targetPrice: "",
         stopLossPrice: "",
       });
     } catch (error) {
@@ -101,20 +100,6 @@ function StockRegister() {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="targetPrice" className="form-label">
-                売却目標価格
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="targetPrice"
-                id="targetPrice"
-                value={formData.targetPrice}
-                onChange={handleChange}
-                placeholder="例： 1500"
-              />
-            </div>
-            <div className="mb-3">
               <label htmlFor="stopLossPrice" className="form-label">
                 損切り価格
               </label>
@@ -134,6 +119,7 @@ function StockRegister() {
           </form>
         </div>
       </div>
+      <Link to="/dashboard">ダッシュボードに戻る</Link>
     </div>
   );
 }

@@ -1,28 +1,25 @@
-from .model import Stock, StockStatus
+from .model import Stock
 from .database import db
 from decimal import Decimal
 import yfinance as yf
 import pdb
 from .util import model_to_dict
 from datetime import datetime, timedelta
+import pandas as pd
 
 
 def create_stock(
     symbol: str,
     purchase_price: Decimal,
     quantity: int,
-    target_price: Decimal,
     stop_loss_price: Decimal,
-    status: StockStatus,
 ) -> Stock:
     try:
         stock = Stock(
             symbol=symbol,
             purchase_price=purchase_price,
             quantity=quantity,
-            target_price=target_price,
             stop_loss_price=stop_loss_price,
-            status=status,
         )
         db.session.add(stock)
         db.session.commit()
@@ -53,7 +50,7 @@ def get_current_price_and_company_name(symbol):
         print(f"データ取得中にエラーが発生しました: {e}")
 
 
-def get_finance_data_dict():
+def get_all_finance_data_dict():
     # pdb.set_trace()
     return_data = []
     stocks = read_all_stocks()
@@ -69,12 +66,6 @@ def get_finance_data_dict():
                 "stock_id": stock_dict["stock_id"],
                 **stock_dict,
                 **finance_data,
-                "reach_target_price": Decimal(
-                    stock_dict["target_price"] - current_price
-                ).quantize(digits),
-                "left_stop_loss_price": Decimal(
-                    current_price - stock_dict["stop_loss_price"]
-                ).quantize(digits),
                 "profit_and_loss": Decimal(
                     (current_price - stock_dict["purchase_price"])
                     * stock_dict["quantity"]
@@ -85,10 +76,32 @@ def get_finance_data_dict():
     return return_data
 
 
+def get_one_finance_data_dict(stock_id):
+    # pdb.set_trace()
+    stock = Stock.query.get(stock_id)
+    stock_dict = model_to_dict(stock)
+    finance_data = get_current_price_and_company_name(stock.symbol)
+    current_price = Decimal(finance_data["current_price"])
+    history_dict = get_individual_stock_history_dict(stock.symbol)
+    digits = Decimal("0.01")
+    return_data = {
+        "stock_id": stock_dict["stock_id"],
+        **stock_dict,
+        **finance_data,
+        "profit_and_loss": Decimal(
+            (current_price - stock_dict["purchase_price"]) * stock_dict["quantity"]
+        ).quantize(digits),
+        **history_dict,
+    }
+    return return_data
+
+
+# TODO データ取得して返すのと、辞書データに変換するのはわけること。
 def get_individual_stock_history_dict(symbol):
-    # 直近２週間のデータを取得
+    # 直近3ヶ月のデータを取得
     ticker = yf.Ticker(symbol + ".T")
-    history = ticker.history(period="1mo")
+    history = ticker.history(period="3mo")
+    history = history.dropna(subset=["Open", "Close", "High", "Low"])
     history_data = history[["Open", "Close", "High", "Low"]].reset_index()
     history_data["Date"] = history_data["Date"].dt.strftime(
         "%Y-%m-%d"
@@ -101,7 +114,6 @@ def update_stock(
     stock_id: int,
     purchase_price: Decimal,
     quantity: int,
-    target_price: Decimal,
     stop_loss_price: Decimal,
 ):
     # 更新対象の行を取得
@@ -115,12 +127,18 @@ def update_stock(
         stock.stock_id = stock_id
         stock.purchase_price = purchase_price
         stock.quantity = quantity
-        stock.target_price = target_price
         stock.stop_loss_price = stop_loss_price
 
         # データベースに保存
         db.session.commit()
-        return Stock.query.get(stock_id)
+        return get_one_finance_data_dict(stock_id)
     except Exception as e:
         db.session.rollback()
         return f"Error occurred: {e}"
+
+
+def calculate_moving_avarage(close_history: pd.Series, short_window, long_window):
+    short_ma = close_history.rolling(window=short_window).mean()
+    long_ma = close_history.rolling(window=long_window).mean()
+
+    return {"short_ma": short_ma, "long_ma": long_ma}
