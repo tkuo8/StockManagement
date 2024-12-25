@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CandlestickChart from "../components/CandlestickChart";
+import StochasticsChart from "../components/StochasticsChart";
 
 function Mainboard() {
   const [tableData, setTableData] = useState([]);
@@ -27,6 +28,7 @@ function Mainboard() {
     history: true,
     shortMa: false,
     longMa: false,
+    stochastics: false,
   });
 
   useEffect(() => {
@@ -125,13 +127,18 @@ function Mainboard() {
       accessorKey: "history",
       header: "2ヶ月の推移",
       cell: ({ getValue, row }) => (
-        <div style={{ height: "300px" }}>
-          <CandlestickChart
-            history={getValue()}
-            stopLossPrice={row.original.stopLossPrice}
-            shortMa={row.original.shortMa}
-            longMa={row.original.longMa}
-          />
+        <div>
+          <div style={{ height: "300px", width: "500px" }}>
+            <CandlestickChart
+              history={getValue()}
+              stopLossPrice={row.original.stopLossPrice}
+              shortMa={row.original.shortMa}
+              longMa={row.original.longMa}
+            />
+          </div>
+          <div style={{ height: "200px", width: "500px" }}>
+            <StochasticsChart stochastics={row.original.stochastics} />
+          </div>
         </div>
       ),
     },

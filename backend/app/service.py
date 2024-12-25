@@ -109,6 +109,9 @@ def create_finance_data(stock_dict):
     long_moving_average_list = get_2month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 15)
     )
+    stochastics_list = get_2month_list_from_dataframe_with_date_index(
+        calculate_stochastics(history[["High", "Low", "Close"]])
+    )
 
     finance_data = {
         "stock_id": stock_dict["stock_id"],
@@ -121,6 +124,7 @@ def create_finance_data(stock_dict):
         "history": ohlc_list,
         "short_ma": short_moving_average_list,
         "long_ma": long_moving_average_list,
+        "stochastics": stochastics_list,
     }
     return finance_data
 
@@ -165,6 +169,21 @@ def calculate_moving_avarage(close_history: pd.DataFrame, window_size):
 def get_list_of_dict_reseted_date_index(dataframe: pd.DataFrame) -> list[dict]:
     return_dataframe = dataframe.reset_index()
     return_dataframe["Date"] = return_dataframe["Date"].dt.strftime("%Y-%m-%d")
-    # 次の式では、dictのlistが返される。
+    # 次の式では、各カラムをキーとして格納しているdict（行に相当する）のlist（つまり、行データを並べたもの）が返される。
     return_list_of_dict = return_dataframe.to_dict(orient="records")
     return return_list_of_dict
+
+
+def calculate_stochastics(df: pd.DataFrame) -> pd.DataFrame:
+    df["Lowest_Low"] = df["Low"].rolling(window=9).min()
+    df["Highest_High"] = df["High"].rolling(window=9).max()
+
+    df["K"] = (
+        (df["Close"] - df["Lowest_Low"]) / (df["Highest_High"] - df["Lowest_Low"]) * 100
+    )
+
+    df["D"] = df["K"].rolling(window=3).mean()
+
+    df["Slow_D"] = df["D"].rolling(window=3).mean()
+
+    return df[["K", "D", "Slow_D"]]
