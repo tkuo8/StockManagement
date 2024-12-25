@@ -25,6 +25,8 @@ function Mainboard() {
     currentPrice: true,
     profitAndLoss: true,
     history: true,
+    shortMa: false,
+    longMa: false,
   });
 
   useEffect(() => {
@@ -127,6 +129,8 @@ function Mainboard() {
           <CandlestickChart
             history={getValue()}
             stopLossPrice={row.original.stopLossPrice}
+            shortMa={row.original.shortMa}
+            longMa={row.original.longMa}
           />
         </div>
       ),

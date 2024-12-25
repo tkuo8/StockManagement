@@ -31,7 +31,7 @@ ChartJS.register(
 );
 
 // グラフコンポーネント
-const CandlestickChart = ({ history, stopLossPrice }) => {
+const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
   const canvasRef = useRef(null);
 
   // ダミー移動平均線データ
@@ -85,13 +85,25 @@ const CandlestickChart = ({ history, stopLossPrice }) => {
             pointRadius: 0,
           },
           {
-            label: "moving average",
-            data: history.map((item, index) => ({
+            label: "5d-MA",
+            data: shortMa.map((item) => ({
               x: new Date(item.Date),
-              y: ma[index],
+              y: item.MA,
             })),
             type: "line",
             borderColor: "yellow",
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0,
+          },
+          {
+            label: "15d-MA",
+            data: longMa.map((item) => ({
+              x: new Date(item.Date),
+              y: item.MA,
+            })),
+            type: "line",
+            borderColor: "red",
             borderWidth: 2,
             fill: false,
             pointRadius: 0,

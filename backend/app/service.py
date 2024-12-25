@@ -99,8 +99,16 @@ def create_finance_data(stock_dict):
 
     price_and_name = get_current_price_and_company_name(ticker)
 
-    history = get_individual_stock_history(ticker)
-    history_dict = history_to_dict_for_plot_period(history)
+    history = ticker.history(period="3mo").dropna(
+        subset=["Open", "Close", "High", "Low"]
+    )
+    ohlc_list = get_2month_list_from_dataframe_with_date_index(history)
+    short_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+        calculate_moving_avarage(history[["Close"]], 5)
+    )
+    long_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+        calculate_moving_avarage(history[["Close"]], 15)
+    )
 
     finance_data = {
         "stock_id": stock_dict["stock_id"],
@@ -110,7 +118,9 @@ def create_finance_data(stock_dict):
             (Decimal(price_and_name["current_price"]) - stock_dict["purchase_price"])
             * stock_dict["quantity"]
         ).quantize(Decimal("0.01")),
-        **history_dict,
+        "history": ohlc_list,
+        "short_ma": short_moving_average_list,
+        "long_ma": long_moving_average_list,
     }
     return finance_data
 
@@ -126,28 +136,35 @@ def get_current_price_and_company_name(ticker):
         print(f"データ取得中にエラーが発生しました: {e}")
 
 
-def get_individual_stock_history(ticker):
-    # 直近3ヶ月のデータを取得
-    history = ticker.history(period="3mo")
-    history = history.dropna(subset=["Open", "Close", "High", "Low"])
-    return history
+# def get_individual_stock_history(ticker):
+#     # 直近3ヶ月のデータを取得
+#     history = ticker.history(period="3mo")
+#     history = history.dropna(subset=["Open", "Close", "High", "Low"])
+#     return history
 
 
-# プロットするのは直近1ヶ月のデータなので、その分だけのhistoryを得る
-def history_to_dict_for_plot_period(history: pd.DataFrame):
+# プロットするのは直近2ヶ月のデータなので、その分だけのdataframeを得る
+def get_2month_list_from_dataframe_with_date_index(dataframe: pd.DataFrame):
     one_month_ago = pd.Timestamp.now(tz="Asia/Tokyo") - pd.Timedelta(days=60)
-    recent_one_month_history = history[history.index >= one_month_ago]
-    return_history = recent_one_month_history[
-        ["Open", "Close", "High", "Low"]
-    ].reset_index()
-    return_history["Date"] = return_history["Date"].dt.strftime(
-        "%Y-%m-%d"
-    )  # 日付フォーマット変換
-    return {"history": return_history.to_dict(orient="records")}
+    recent_one_month_dataframe = dataframe[dataframe.index >= one_month_ago]
+    return get_list_of_dict_reseted_date_index(recent_one_month_dataframe)
+    # return_history = recent_one_month_history[
+    #     ["Open", "Close", "High", "Low"]
+    # ].reset_index()
+    # return_history["Date"] = return_history["Date"].dt.strftime(
+    #     "%Y-%m-%d"
+    # )  # 日付フォーマット変換
+    # return {"history": return_history.to_dict(orient="records")}
 
 
-def calculate_moving_avarage(close_history: pd.Series, short_window, long_window):
-    short_ma = close_history.rolling(window=short_window).mean()
-    long_ma = close_history.rolling(window=long_window).mean()
+def calculate_moving_avarage(close_history: pd.DataFrame, window_size):
+    close_history["MA"] = close_history["Close"].rolling(window=window_size).mean()
+    return close_history[["MA"]]
 
-    return {"short_ma": short_ma, "long_ma": long_ma}
+
+def get_list_of_dict_reseted_date_index(dataframe: pd.DataFrame) -> list[dict]:
+    return_dataframe = dataframe.reset_index()
+    return_dataframe["Date"] = return_dataframe["Date"].dt.strftime("%Y-%m-%d")
+    # 次の式では、dictのlistが返される。
+    return_list_of_dict = return_dataframe.to_dict(orient="records")
+    return return_list_of_dict
