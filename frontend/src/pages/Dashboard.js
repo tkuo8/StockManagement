@@ -124,21 +124,21 @@ function Mainboard() {
       header: "損益額",
     },
     {
+      accessorKey: "alert",
+      header: "アラート",
+    },
+    {
       accessorKey: "history",
       header: "2ヶ月の推移",
       cell: ({ getValue, row }) => (
-        <div>
-          <div style={{ height: "300px", width: "500px" }}>
-            <CandlestickChart
-              history={getValue()}
-              stopLossPrice={row.original.stopLossPrice}
-              shortMa={row.original.shortMa}
-              longMa={row.original.longMa}
-            />
-          </div>
-          <div style={{ height: "200px", width: "500px" }}>
-            <StochasticsChart stochastics={row.original.stochastics} />
-          </div>
+        <div style={{ height: "300px", width: "600px" }}>
+          <CandlestickChart
+            history={getValue()}
+            stopLossPrice={row.original.stopLossPrice}
+            shortMa={row.original.shortMa}
+            longMa={row.original.longMa}
+            stochastics={row.original.stochastics}
+          />
         </div>
       ),
     },
@@ -163,7 +163,7 @@ function Mainboard() {
             className="table-wrapper"
             style={{ overflowY: "auto", maxHeight: "580px" }}
           >
-            <table className="table table-striped table-hover align-middle">
+            <table className="table align-middle">
               <thead className="table-primary">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>

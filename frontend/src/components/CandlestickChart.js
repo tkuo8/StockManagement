@@ -31,7 +31,13 @@ ChartJS.register(
 );
 
 // グラフコンポーネント
-const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
+const CandlestickChart = ({
+  history,
+  stopLossPrice,
+  shortMa,
+  longMa,
+  stochastics,
+}) => {
   const canvasRef = useRef(null);
 
   // ダミー移動平均線データ
@@ -56,20 +62,20 @@ const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
               l: item.Low,
               c: item.Close,
             })),
+            yAxisID: "y1",
             borderColor: "black",
             borderWidth: 1,
-            barThickness: 5,
+            barThickness: 3,
             backgroundColors: {
-              up: "#ff9999",
-              down: "#90ee90",
+              up: "#ea5550",
+              down: "#00a960",
               unchanged: "#696969",
             },
             borderColors: {
-              up: "#ff9999",
-              down: "#90ee90",
+              up: "#ea5550",
+              down: "#00a960",
               unchanged: "#696969",
             },
-            categoryPercentage: 0.4,
           },
           {
             label: "StopLossPrice",
@@ -77,9 +83,10 @@ const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
               x: new Date(item.Date),
               y: stopLossPrice,
             })),
+            yAxisID: "y1",
             type: "line",
-            borderColor: "orange",
-            borderWidth: 2,
+            borderColor: "black",
+            borderWidth: 1,
             borderDash: [5, 5],
             fill: false,
             pointRadius: 0,
@@ -90,9 +97,10 @@ const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
               x: new Date(item.Date),
               y: item.MA,
             })),
+            yAxisID: "y1",
             type: "line",
-            borderColor: "yellow",
-            borderWidth: 2,
+            borderColor: "#fcc800",
+            borderWidth: 1,
             fill: false,
             pointRadius: 0,
           },
@@ -102,11 +110,40 @@ const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
               x: new Date(item.Date),
               y: item.MA,
             })),
+            yAxisID: "y1",
             type: "line",
-            borderColor: "red",
-            borderWidth: 2,
+            borderColor: "#e73562",
+            borderWidth: 1,
             fill: false,
             pointRadius: 0,
+          },
+          {
+            label: "%D",
+            data: stochastics.map((item) => ({
+              x: new Date(item.Date),
+              y: item.D,
+            })),
+            type: "line",
+            yAxisID: "y2",
+            borderColor: "#82cddd",
+            borderWidth: 1,
+            fill: false,
+            pointRadius: 0,
+            borderDash: [5, 2],
+          },
+          {
+            label: "Slow%D",
+            data: stochastics.map((item) => ({
+              x: new Date(item.Date),
+              y: item.SlowD,
+            })),
+            type: "line",
+            yAxisID: "y2",
+            borderColor: "#008db7",
+            borderWidth: 1,
+            fill: false,
+            pointRadius: 0,
+            borderDash: [5, 2],
           },
         ],
       },
@@ -120,10 +157,20 @@ const CandlestickChart = ({ history, stopLossPrice, shortMa, longMa }) => {
               unit: "day",
             },
           },
-          y: {
+          y1: {
+            position: "left",
             title: {
               display: true,
-              text: "Price",
+              text: "Stock Price / Moving Average",
+            },
+          },
+          y2: {
+            position: "right",
+            beginAtZero: true,
+            max: 100,
+            title: {
+              display: true,
+              text: "Stochastics Percentage",
             },
           },
         },
