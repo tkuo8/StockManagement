@@ -24,7 +24,6 @@ def register_stock():
             data["symbol"],
             Decimal(data["purchasePrice"]),
             int(data["quantity"]),
-            Decimal(data["stopLossPrice"]),
         )
         return jsonify({"message": "Stock created successfully"}), 201
     except ValueError as e:
@@ -51,12 +50,9 @@ def put_stock(stock_id):
 
     purchase_price = data["purchasePrice"]
     quantity = data["quantity"]
-    stop_loss_price = data["stopLossPrice"]
 
     try:
-        updated_data_dict = update_stock(
-            stock_id, purchase_price, quantity, stop_loss_price
-        )
+        updated_data_dict = update_stock(stock_id, purchase_price, quantity)
         return jsonify(convert_keys_to_camel_case(updated_data_dict)), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400

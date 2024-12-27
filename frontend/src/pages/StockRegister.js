@@ -99,20 +99,6 @@ function StockRegister() {
                 placeholder="例： 100"
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="stopLossPrice" className="form-label">
-                損切り価格
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="stopLossPrice"
-                id="stopLossPrice"
-                value={formData.stopLossPrice}
-                onChange={handleChange}
-                placeholder="例： 900"
-              />
-            </div>
             <button type="submit" className="btn btn-primary w-100">
               登録
             </button>

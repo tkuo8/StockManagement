@@ -16,14 +16,12 @@ def create_stock(
     symbol: str,
     purchase_price: Decimal,
     quantity: int,
-    stop_loss_price: Decimal,
 ) -> Stock:
     try:
         stock = Stock(
             symbol=symbol,
             purchase_price=purchase_price,
             quantity=quantity,
-            stop_loss_price=stop_loss_price,
         )
         db.session.add(stock)
         db.session.commit()
@@ -46,7 +44,6 @@ def update_stock(
     stock_id: int,
     purchase_price: Decimal,
     quantity: int,
-    stop_loss_price: Decimal,
 ):
     # 更新対象の行を取得
     try:
@@ -59,7 +56,6 @@ def update_stock(
         stock.stock_id = stock_id
         stock.purchase_price = purchase_price
         stock.quantity = quantity
-        stock.stop_loss_price = stop_loss_price
 
         # データベースに保存
         db.session.commit()
@@ -108,7 +104,10 @@ def create_finance_data(stock_dict):
         calculate_moving_avarage(history[["Close"]], 5)
     )
     long_moving_average_list = get_2month_list_from_dataframe_with_date_index(
-        calculate_moving_avarage(history[["Close"]], 15)
+        calculate_moving_avarage(history[["Close"]], 20)
+    )
+    sixty_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+        calculate_moving_avarage(history[["Close"]], 60)
     )
     hundred_moving_average_list = get_2month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 100)
@@ -128,6 +127,7 @@ def create_finance_data(stock_dict):
         "history": ohlc_list,
         "short_ma": short_moving_average_list,
         "long_ma": long_moving_average_list,
+        "sixty_ma": sixty_moving_average_list,
         "hundred_ma": hundred_moving_average_list,
         "stochastics": stochastics_list,
         "alerts": {"condition1": True, "condition2": False, "condition3": False},

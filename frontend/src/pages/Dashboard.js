@@ -22,13 +22,13 @@ function Mainboard() {
     companyName: true,
     purchasePrice: true,
     quantity: true,
-    stopLossPrice: false,
     currentPrice: true,
     profitAndLoss: true,
     alerts: true,
     history: true,
     shortMa: false,
     longMa: false,
+    sixtyMa: false,
     hundredMa: false,
     stochastics: false,
   });
@@ -114,10 +114,6 @@ function Mainboard() {
       header: "保有株数",
     },
     {
-      accessorKey: "stopLossPrice",
-      header: "損切り価格",
-    },
-    {
       accessorKey: "currentPrice",
       header: "現在価格",
     },
@@ -163,9 +159,9 @@ function Mainboard() {
         <div style={{ height: "300px", width: "600px" }}>
           <CandlestickChart
             history={getValue()}
-            stopLossPrice={row.original.stopLossPrice}
             shortMa={row.original.shortMa}
             longMa={row.original.longMa}
+            sixtyMa={row.original.sixtyMa}
             hundredMa={row.original.hundredMa}
             stochastics={row.original.stochastics}
           />
@@ -264,16 +260,6 @@ function Mainboard() {
                           type="number"
                           name="quantity"
                           value={currentRow.quantity}
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                      <Form.Group controlId="formStopLossPrice">
-                        <Form.Label>損切り価格</Form.Label>
-                        <Form.Control
-                          type="number"
-                          name="stopLossPrice"
-                          step="0.01"
-                          value={currentRow.stopLossPrice}
                           onChange={handleChange}
                         />
                       </Form.Group>

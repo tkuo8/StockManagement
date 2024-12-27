@@ -20,7 +20,6 @@ class Stock(db.Model):
     symbol = db.Column(String(10), nullable=False)
     purchase_price = db.Column(Numeric(10, 2), nullable=False)
     quantity = db.Column(Integer, nullable=False)
-    stop_loss_price = db.Column(Numeric(10, 2), nullable=False)
     created_at = db.Column(DateTime, nullable=False, server_default=func.now())
     updated_at = db.Column(
         DateTime, nullable=False, server_default=func.now(), onupdate=func.now()

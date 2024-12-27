@@ -33,9 +33,9 @@ ChartJS.register(
 // グラフコンポーネント
 const CandlestickChart = ({
   history,
-  stopLossPrice,
   shortMa,
   longMa,
+  sixtyMa,
   hundredMa,
   stochastics,
 }) => {
@@ -73,20 +73,20 @@ const CandlestickChart = ({
               unchanged: "#696969",
             },
           },
-          {
-            label: "StopLossPrice",
-            data: history.map((item) => ({
-              x: new Date(item.Date),
-              y: stopLossPrice,
-            })),
-            yAxisID: "y1",
-            type: "line",
-            borderColor: "black",
-            borderWidth: 1,
-            borderDash: [5, 5],
-            fill: false,
-            pointRadius: 0,
-          },
+          //   {
+          //     label: "StopLossPrice",
+          //     data: history.map((item) => ({
+          //       x: new Date(item.Date),
+          //       y: stopLossPrice,
+          //     })),
+          //     yAxisID: "y1",
+          //     type: "line",
+          //     borderColor: "black",
+          //     borderWidth: 1,
+          //     borderDash: [5, 5],
+          //     fill: false,
+          //     pointRadius: 0,
+          //   },
           {
             label: "5d-MA",
             data: shortMa.map((item) => ({
@@ -101,14 +101,27 @@ const CandlestickChart = ({
             pointRadius: 0,
           },
           {
-            label: "15d-MA",
+            label: "20d-MA",
             data: longMa.map((item) => ({
               x: new Date(item.Date),
               y: item.MA,
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#e73562",
+            borderColor: "#ee7800",
+            borderWidth: 1,
+            fill: false,
+            pointRadius: 0,
+          },
+          {
+            label: "60d-MA",
+            data: sixtyMa.map((item) => ({
+              x: new Date(item.Date),
+              y: item.MA,
+            })),
+            yAxisID: "y1",
+            type: "line",
+            borderColor: "#f5b2ac",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,
@@ -121,39 +134,39 @@ const CandlestickChart = ({
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#ea553a",
+            borderColor: "#d70035",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,
           },
-          {
-            label: "%D",
-            data: stochastics.map((item) => ({
-              x: new Date(item.Date),
-              y: item.D,
-            })),
-            type: "line",
-            yAxisID: "y2",
-            borderColor: "#82cddd",
-            borderWidth: 1,
-            fill: false,
-            pointRadius: 0,
-            borderDash: [5, 2],
-          },
-          {
-            label: "Slow%D",
-            data: stochastics.map((item) => ({
-              x: new Date(item.Date),
-              y: item.SlowD,
-            })),
-            type: "line",
-            yAxisID: "y2",
-            borderColor: "#008db7",
-            borderWidth: 1,
-            fill: false,
-            pointRadius: 0,
-            borderDash: [5, 2],
-          },
+          //   {
+          //     label: "%D",
+          //     data: stochastics.map((item) => ({
+          //       x: new Date(item.Date),
+          //       y: item.D,
+          //     })),
+          //     type: "line",
+          //     yAxisID: "y2",
+          //     borderColor: "#82cddd",
+          //     borderWidth: 1,
+          //     fill: false,
+          //     pointRadius: 0,
+          //     borderDash: [5, 2],
+          //   },
+          //   {
+          //     label: "Slow%D",
+          //     data: stochastics.map((item) => ({
+          //       x: new Date(item.Date),
+          //       y: item.SlowD,
+          //     })),
+          //     type: "line",
+          //     yAxisID: "y2",
+          //     borderColor: "#008db7",
+          //     borderWidth: 1,
+          //     fill: false,
+          //     pointRadius: 0,
+          //     borderDash: [5, 2],
+          //   },
         ],
       },
       options: {
@@ -173,15 +186,15 @@ const CandlestickChart = ({
               text: "Stock Price / Moving Average",
             },
           },
-          y2: {
-            position: "right",
-            beginAtZero: true,
-            max: 100,
-            title: {
-              display: true,
-              text: "Stochastics Percentage",
-            },
-          },
+          //   y2: {
+          //     position: "right",
+          //     beginAtZero: true,
+          //     max: 100,
+          //     title: {
+          //       display: true,
+          //       text: "Stochastics Percentage",
+          //     },
+          //   },
         },
       },
     });
@@ -189,7 +202,7 @@ const CandlestickChart = ({
     return () => {
       chart.destroy();
     };
-  }, [history, stopLossPrice]);
+  }, [history]);
 
   return <canvas ref={canvasRef} />;
 };
