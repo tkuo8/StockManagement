@@ -36,14 +36,10 @@ const CandlestickChart = ({
   stopLossPrice,
   shortMa,
   longMa,
+  hundredMa,
   stochastics,
 }) => {
   const canvasRef = useRef(null);
-
-  // ダミー移動平均線データ
-  const ma = Array.from({ length: 21 }, () =>
-    Math.floor(Math.random() * (2751 - 2600) + 2600)
-  );
 
   useEffect(() => {
     const ctx = canvasRef.current.getContext("2d");
@@ -113,6 +109,19 @@ const CandlestickChart = ({
             yAxisID: "y1",
             type: "line",
             borderColor: "#e73562",
+            borderWidth: 1,
+            fill: false,
+            pointRadius: 0,
+          },
+          {
+            label: "100d-MA",
+            data: hundredMa.map((item) => ({
+              x: new Date(item.Date),
+              y: item.MA,
+            })),
+            yAxisID: "y1",
+            type: "line",
+            borderColor: "#ea553a",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,

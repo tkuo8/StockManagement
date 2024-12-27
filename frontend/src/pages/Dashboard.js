@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Overlay, Popover, Form } from "react-bootstrap";
+import { Button, Overlay, Popover, Form, Badge } from "react-bootstrap";
 import {
   useReactTable,
   getCoreRowModel,
@@ -25,9 +25,11 @@ function Mainboard() {
     stopLossPrice: false,
     currentPrice: true,
     profitAndLoss: true,
+    alerts: true,
     history: true,
     shortMa: false,
     longMa: false,
+    hundredMa: false,
     stochastics: false,
   });
 
@@ -124,8 +126,35 @@ function Mainboard() {
       header: "損益額",
     },
     {
-      accessorKey: "alert",
+      accessorKey: "alerts",
       header: "アラート",
+      cell: ({ getValue }) => {
+        // const condition = {
+        //   condition1: true,
+        //   condition2: false,
+        //   condition3: true,
+        // };
+        const value = getValue();
+        return (
+          <div>
+            {value.condition1 && (
+              <Badge bg="danger" className="me-1">
+                cond1
+              </Badge>
+            )}
+            {value.condition2 && (
+              <Badge bg="danger" className="me-1">
+                cond2
+              </Badge>
+            )}
+            {value.condition3 && (
+              <Badge bg="danger" className="me-1">
+                cond3
+              </Badge>
+            )}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "history",
@@ -137,6 +166,7 @@ function Mainboard() {
             stopLossPrice={row.original.stopLossPrice}
             shortMa={row.original.shortMa}
             longMa={row.original.longMa}
+            hundredMa={row.original.hundredMa}
             stochastics={row.original.stochastics}
           />
         </div>
