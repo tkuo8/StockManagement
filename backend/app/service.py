@@ -99,22 +99,41 @@ def create_finance_data(stock_dict):
     history = ticker.history(period="1y").dropna(
         subset=["Open", "Close", "High", "Low"]
     )
-    ohlc_list = get_2month_list_from_dataframe_with_date_index(history)
-    short_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+    ohlc_list = get_six_month_list_from_dataframe_with_date_index(history)
+    short_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 5)
     )
-    long_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+    middle_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 20)
     )
-    sixty_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+    long_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 60)
     )
-    hundred_moving_average_list = get_2month_list_from_dataframe_with_date_index(
+    very_long_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
         calculate_moving_avarage(history[["Close"]], 100)
     )
-    stochastics_list = get_2month_list_from_dataframe_with_date_index(
-        calculate_stochastics(history[["High", "Low", "Close"]])
+    # stochastics_list = get_six_month_list_from_dataframe_with_date_index(
+    #     calculate_stochastics(history[["High", "Low", "Close"]])
+    # )
+
+    bool_buy = is_buy(
+        history.iloc[-1]["Open"],
+        history.iloc[-1]["Close"],
+        short_moving_average_list[-2]["MA"],
+        short_moving_average_list[-1]["MA"],
+        very_long_moving_average_list[-1]["MA"],
     )
+    bool_sell = is_sell(
+        history.iloc[-1]["Open"],
+        history.iloc[-1]["Close"],
+        short_moving_average_list[-2]["MA"],
+        short_moving_average_list[-1]["MA"],
+    )
+    bool_exclusion = is_exclusion(
+        history.iloc[-1]["Close"], very_long_moving_average_list[-1]["MA"]
+    )
+
+    # pdb.set_trace()
 
     finance_data = {
         "stock_id": stock_dict["stock_id"],
@@ -126,11 +145,15 @@ def create_finance_data(stock_dict):
         ).quantize(Decimal("0.01")),
         "history": ohlc_list,
         "short_ma": short_moving_average_list,
+        "middle_ma": middle_moving_average_list,
         "long_ma": long_moving_average_list,
-        "sixty_ma": sixty_moving_average_list,
-        "hundred_ma": hundred_moving_average_list,
-        "stochastics": stochastics_list,
-        "alerts": {"condition1": True, "condition2": False, "condition3": False},
+        "very_long_ma": very_long_moving_average_list,
+        "stochastics": [],
+        "alerts": {
+            "is_buy": bool(bool_buy),
+            "is_sell": bool(bool_sell),
+            "is_exclusion": bool(bool_exclusion),
+        },
     }
     return finance_data
 
@@ -146,9 +169,9 @@ def get_current_price_and_company_name(ticker):
         print(f"データ取得中にエラーが発生しました: {e}")
 
 
-# プロットするのは直近2ヶ月のデータなので、その分だけのdataframeを得る
-def get_2month_list_from_dataframe_with_date_index(dataframe: pd.DataFrame):
-    one_month_ago = pd.Timestamp.now(tz="Asia/Tokyo") - pd.Timedelta(days=60)
+# プロットするのは直近6ヶ月のデータなので、その分だけのdataframeを得る
+def get_six_month_list_from_dataframe_with_date_index(dataframe: pd.DataFrame):
+    one_month_ago = pd.Timestamp.now(tz="Asia/Tokyo") - pd.Timedelta(days=180)
     recent_one_month_dataframe = dataframe[dataframe.index >= one_month_ago]
     return get_list_of_dict_reseted_date_index(recent_one_month_dataframe)
 
@@ -179,3 +202,46 @@ def calculate_stochastics(df: pd.DataFrame) -> pd.DataFrame:
     df["Slow_D"] = df["D"].rolling(window=3).mean()
 
     return df[["K", "D", "Slow_D"]]
+
+
+# 買い時を判定する
+# 買い時の条件は、次の1, 2を全て満たすこと
+# 1 株価が100日線を上回っている
+# 2 株価が下半身を持つ
+#   「下半身」の条件は、次の(1)から(4)までを全て満たすこと
+#  (1) 5日移動平均線が横ばい又は上向き
+#  (2) 陽線である
+#  (3) 終値が5日移動平均線より上
+#  (4) ローソク足の実態の、5日移動平均線より上に飛び出している部分の長さが実態全体の2分の1以上である
+def is_buy(open, close, short_ma_yesterday, short_ma, very_long_ma):
+    # pdb.set_trace()
+    return (
+        very_long_ma < close  # 1
+        and short_ma_yesterday <= short_ma  # 2(1)
+        and open < close  # 2(2)
+        and short_ma < close  # 2(3)
+        and (short_ma <= open or (close - short_ma) / (close - open) >= 0.5)  # 2(4)
+    )
+
+
+# 売り時を判定する
+# 売り時の条件は、株価が逆下半身を持つこと。
+# 「逆下半身」の条件は、次の(1)から(4)までを全て満たすこと
+# (1) 5日移動平均線が横ばい又は下向き
+# (2) 陰線である
+# (3) 終値が5日移動平均線より下
+# (4) ローソク足の実態の、5日移動平均線より下に飛び出している部分の長さが実態全体の2分の1以上である
+def is_sell(open, close, short_ma_yesterday, short_ma):
+    return (
+        short_ma_yesterday >= short_ma  # (1)
+        and open > close  # (2)
+        and short_ma > close  # (3)
+        and (short_ma >= open or (short_ma - close) / (open - close) >= 0.5)  # (4)
+    )
+
+
+# 株価が100日移動平均線より下なので注目から除外するかどうかを判定する
+# 基本的に、買いの戦略でいくから、株価が100日移動平均線を割り込んでいると手を出さない
+# よって、株価が100日移動平均線を割り込んでいる場合は、注目から除外する
+def is_exclusion(close, very_long_ma):
+    return close < very_long_ma

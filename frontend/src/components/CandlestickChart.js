@@ -34,9 +34,9 @@ ChartJS.register(
 const CandlestickChart = ({
   history,
   shortMa,
+  middleMa,
   longMa,
-  sixtyMa,
-  hundredMa,
+  veryLongMa,
   stochastics,
 }) => {
   const canvasRef = useRef(null);
@@ -61,7 +61,7 @@ const CandlestickChart = ({
             yAxisID: "y1",
             borderColor: "black",
             borderWidth: 1,
-            barThickness: 3,
+            barThickness: 2,
             backgroundColors: {
               up: "#ea5550",
               down: "#00a960",
@@ -102,39 +102,39 @@ const CandlestickChart = ({
           },
           {
             label: "20d-MA",
-            data: longMa.map((item) => ({
+            data: middleMa.map((item) => ({
               x: new Date(item.Date),
               y: item.MA,
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#ee7800",
+            borderColor: "#ea618e",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,
           },
           {
             label: "60d-MA",
-            data: sixtyMa.map((item) => ({
+            data: longMa.map((item) => ({
               x: new Date(item.Date),
               y: item.MA,
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#f5b2ac",
+            borderColor: "#3cb37a",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,
           },
           {
             label: "100d-MA",
-            data: hundredMa.map((item) => ({
+            data: veryLongMa.map((item) => ({
               x: new Date(item.Date),
               y: item.MA,
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#d70035",
+            borderColor: "#0068b7",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Overlay, Popover, Form, Badge } from "react-bootstrap";
 import {
   useReactTable,
@@ -8,7 +8,6 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CandlestickChart from "../components/CandlestickChart";
-import StochasticsChart from "../components/StochasticsChart";
 
 function Mainboard() {
   const [tableData, setTableData] = useState([]);
@@ -27,9 +26,9 @@ function Mainboard() {
     alerts: true,
     history: true,
     shortMa: false,
+    middleMa: false,
     longMa: false,
-    sixtyMa: false,
-    hundredMa: false,
+    veryLongMa: false,
     stochastics: false,
   });
 
@@ -124,49 +123,12 @@ function Mainboard() {
     {
       accessorKey: "alerts",
       header: "アラート",
-      cell: ({ getValue }) => {
-        // const condition = {
-        //   condition1: true,
-        //   condition2: false,
-        //   condition3: true,
-        // };
-        const value = getValue();
-        return (
-          <div>
-            {value.condition1 && (
-              <Badge bg="danger" className="me-1">
-                cond1
-              </Badge>
-            )}
-            {value.condition2 && (
-              <Badge bg="danger" className="me-1">
-                cond2
-              </Badge>
-            )}
-            {value.condition3 && (
-              <Badge bg="danger" className="me-1">
-                cond3
-              </Badge>
-            )}
-          </div>
-        );
-      },
+      cell: renderAlertsCell,
     },
     {
       accessorKey: "history",
-      header: "2ヶ月の推移",
-      cell: ({ getValue, row }) => (
-        <div style={{ height: "300px", width: "600px" }}>
-          <CandlestickChart
-            history={getValue()}
-            shortMa={row.original.shortMa}
-            longMa={row.original.longMa}
-            sixtyMa={row.original.sixtyMa}
-            hundredMa={row.original.hundredMa}
-            stochastics={row.original.stochastics}
-          />
-        </div>
-      ),
+      header: "6ヶ月の推移",
+      cell: renderHistoryCell,
     },
   ];
 
@@ -281,6 +243,44 @@ function Mainboard() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function renderAlertsCell({ getValue }) {
+  const value = getValue();
+  return (
+    <div>
+      {value.isBuy && (
+        <Badge bg="danger" className="me-1">
+          買い
+        </Badge>
+      )}
+      {value.isSell && (
+        <Badge bg="success" className="me-1">
+          売り
+        </Badge>
+      )}
+      {value.isExclusion && (
+        <Badge bg="secondary" className="me-1">
+          除外
+        </Badge>
+      )}
+    </div>
+  );
+}
+
+function renderHistoryCell({ getValue, row }) {
+  return (
+    <div style={{ height: "300px", width: "700px" }}>
+      <CandlestickChart
+        history={getValue()}
+        shortMa={row.original.shortMa}
+        middleMa={row.original.middleMa}
+        longMa={row.original.longMa}
+        veryLongMa={row.original.veryLongMa}
+        stochastics={row.original.stochastics}
+      />
     </div>
   );
 }
