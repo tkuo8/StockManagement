@@ -1,4 +1,4 @@
-from .model import Stock
+from .model import Stock, StockPrice
 from .database import db
 from decimal import Decimal
 import yfinance as yf
@@ -245,3 +245,43 @@ def is_sell(open, close, short_ma_yesterday, short_ma):
 # よって、株価が100日移動平均線を割り込んでいる場合は、注目から除外する
 def is_exclusion(close, very_long_ma):
     return close < very_long_ma
+
+
+def main():
+    from .__init__ import create_app
+
+    app = create_app()
+    with app.app_context():
+        # stocks = read_all_stocks()
+        # pdb.set_trace()
+        stocks = [Stock.query.get(685)]
+        for stock in stocks:
+            # stock_dict = model_to_dict(stock)
+            stock_dict = {"symbol": "7570"}
+            print(stock_dict["symbol"])
+            ticker = yf.Ticker(stock_dict["symbol"] + ".T")
+            history = ticker.history(period="1y").dropna()
+            history["MA5"] = history["Close"].rolling(window=5).mean()
+            history["MA20"] = history["Close"].rolling(window=20).mean()
+            history["MA60"] = history["Close"].rolling(window=60).mean()
+            history["MA100"] = history["Close"].rolling(window=100).mean()
+            for index, row in history.iterrows():
+                stock_price = StockPrice(
+                    symbol=stock_dict["symbol"],
+                    date=index.date(),
+                    open_price=row["Open"],
+                    high_price=row["High"],
+                    low_price=row["Low"],
+                    close_price=row["Close"],
+                    volume=row["Volume"],
+                    ma_5=row["MA5"],
+                    ma_20=row["MA20"],
+                    ma_60=row["MA60"],
+                    ma_100=row["MA100"],
+                )
+                db.session.add(stock_price)
+            db.session.commit()
+
+
+if __name__ == "__main__":
+    main()
