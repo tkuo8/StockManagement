@@ -31,14 +31,7 @@ ChartJS.register(
 );
 
 // グラフコンポーネント
-const CandlestickChart = ({
-  history,
-  shortMa,
-  middleMa,
-  longMa,
-  veryLongMa,
-  stochastics,
-}) => {
+const CandlestickChart = ({ history }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -52,11 +45,11 @@ const CandlestickChart = ({
           {
             label: "Stock Price",
             data: history.map((item) => ({
-              x: new Date(item.Date),
-              o: item.Open,
-              h: item.High,
-              l: item.Low,
-              c: item.Close,
+              x: new Date(item.date),
+              o: item.openPrice,
+              h: item.highPrice,
+              l: item.lowPrice,
+              c: item.closePrice,
             })),
             yAxisID: "y1",
             borderColor: "black",
@@ -89,9 +82,9 @@ const CandlestickChart = ({
           //   },
           {
             label: "5d-MA",
-            data: shortMa.map((item) => ({
-              x: new Date(item.Date),
-              y: item.MA,
+            data: history.map((item) => ({
+              x: new Date(item.date),
+              y: item.ma5,
             })),
             yAxisID: "y1",
             type: "line",
@@ -102,9 +95,9 @@ const CandlestickChart = ({
           },
           {
             label: "20d-MA",
-            data: middleMa.map((item) => ({
-              x: new Date(item.Date),
-              y: item.MA,
+            data: history.map((item) => ({
+              x: new Date(item.date),
+              y: item.ma20,
             })),
             yAxisID: "y1",
             type: "line",
@@ -115,9 +108,9 @@ const CandlestickChart = ({
           },
           {
             label: "60d-MA",
-            data: longMa.map((item) => ({
-              x: new Date(item.Date),
-              y: item.MA,
+            data: history.map((item) => ({
+              x: new Date(item.date),
+              y: item.ma60,
             })),
             yAxisID: "y1",
             type: "line",
@@ -128,9 +121,9 @@ const CandlestickChart = ({
           },
           {
             label: "100d-MA",
-            data: veryLongMa.map((item) => ({
-              x: new Date(item.Date),
-              y: item.MA,
+            data: history.map((item) => ({
+              x: new Date(item.date),
+              y: item.ma100,
             })),
             yAxisID: "y1",
             type: "line",

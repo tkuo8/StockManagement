@@ -1,4 +1,5 @@
 from enum import Enum
+import datetime
 
 
 # キャメルケース変換関数を定義
@@ -26,7 +27,15 @@ def model_to_dict(obj):
         col.name: (
             getattr(obj, col.name).value
             if isinstance(getattr(obj, col.name), Enum)
-            else getattr(obj, col.name)
+            else (
+                getattr(obj, col.name).strftime("%Y-%m-%d")
+                # Date 型の場合は strftime でフォーマット
+                if isinstance(
+                    getattr(obj, col.name), (datetime.date, datetime.datetime)
+                )
+                # それ以外はそのまま取得
+                else getattr(obj, col.name)
+            )
         )
         for col in obj.__table__.columns
     }

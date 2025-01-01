@@ -18,10 +18,13 @@ def create_stock(
     quantity: int,
 ) -> Stock:
     try:
+        ticker = yf.Ticker(symbol + ".T")
+        company_name = ticker.info.get("longName", "情報がありません")
         stock = Stock(
             symbol=symbol,
             purchase_price=purchase_price,
             quantity=quantity,
+            company_name=company_name,
         )
         db.session.add(stock)
         db.session.commit()
@@ -34,6 +37,15 @@ def create_stock(
 def read_all_stocks() -> list[Stock]:
     try:
         stocks = Stock.query.all()
+        return stocks
+    except Exception as e:
+        print(f"error occured : {e}")
+        raise e
+
+
+def read_ten_stocks() -> list[Stock]:
+    try:
+        stocks = Stock.query.limit(10).all()
         return stocks
     except Exception as e:
         print(f"error occured : {e}")
@@ -53,7 +65,6 @@ def update_stock(
             return f"Stock with id {stock_id} not found"
 
         # 属性を変更
-        stock.stock_id = stock_id
         stock.purchase_price = purchase_price
         stock.quantity = quantity
 
@@ -82,6 +93,17 @@ def get_all_finance_data_dict():
     return return_data
 
 
+def get_ten_finance_data_dict():
+    # pdb.set_trace()
+    return_data = []
+    stocks = read_ten_stocks()
+    for stock in stocks:
+        # pdb.set_trace()
+        finance_data = create_finance_data(stock)
+        return_data.append(finance_data)
+    return return_data
+
+
 def get_one_finance_data_dict(stock_id):
     # pdb.set_trace()
     stock = Stock.query.get(stock_id)
@@ -90,65 +112,53 @@ def get_one_finance_data_dict(stock_id):
     return return_data
 
 
-def create_finance_data(stock_dict):
-    ticker = yf.Ticker(stock_dict["symbol"] + ".T")
+def create_finance_data(stock: Stock):
+    stock_dict = model_to_dict(stock)
+    history = get_six_month_history(stock)
 
-    price_and_name = get_current_price_and_company_name(ticker)
+    # 日付を datetime 型に変換して、降順にソート
+    sorted_history = sorted(
+        history, key=lambda x: datetime.strptime(x["date"], "%Y-%m-%d"), reverse=True
+    )
 
-    # 移動平均線の計算のため、直近１年のデータを取得する
-    history = ticker.history(period="1y").dropna(
-        subset=["Open", "Close", "High", "Low"]
-    )
-    ohlc_list = get_six_month_list_from_dataframe_with_date_index(history)
-    short_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
-        calculate_moving_avarage(history[["Close"]], 5)
-    )
-    middle_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
-        calculate_moving_avarage(history[["Close"]], 20)
-    )
-    long_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
-        calculate_moving_avarage(history[["Close"]], 60)
-    )
-    very_long_moving_average_list = get_six_month_list_from_dataframe_with_date_index(
-        calculate_moving_avarage(history[["Close"]], 100)
-    )
-    # stochastics_list = get_six_month_list_from_dataframe_with_date_index(
-    #     calculate_stochastics(history[["High", "Low", "Close"]])
-    # )
+    # 最近の行
+    if len(sorted_history) > 0:
+        latest_entry = sorted_history[0]
+    else:
+        latest_entry = None
+
+    # 一つ前の日付の行
+    if len(sorted_history) > 1:
+        previous_entry = sorted_history[1]
+    else:
+        previous_entry = None
 
     bool_buy = is_buy(
-        history.iloc[-1]["Open"],
-        history.iloc[-1]["Close"],
-        short_moving_average_list[-2]["MA"],
-        short_moving_average_list[-1]["MA"],
-        very_long_moving_average_list[-1]["MA"],
-    )
-    bool_sell = is_sell(
-        history.iloc[-1]["Open"],
-        history.iloc[-1]["Close"],
-        short_moving_average_list[-2]["MA"],
-        short_moving_average_list[-1]["MA"],
-    )
-    bool_exclusion = is_exclusion(
-        history.iloc[-1]["Close"], very_long_moving_average_list[-1]["MA"]
+        open=latest_entry["open_price"],
+        close=latest_entry["close_price"],
+        short_ma_yesterday=previous_entry["ma_5"],
+        short_ma=latest_entry["ma_5"],
+        very_long_ma=latest_entry["ma_100"],
     )
 
-    # pdb.set_trace()
+    bool_sell = is_sell(
+        open=latest_entry["open_price"],
+        close=latest_entry["close_price"],
+        short_ma_yesterday=previous_entry["ma_5"],
+        short_ma=latest_entry["ma_5"],
+    )
+
+    bool_exclusion = is_exclusion(
+        close=latest_entry["close_price"], very_long_ma=latest_entry["ma_100"]
+    )
 
     finance_data = {
-        "stock_id": stock_dict["stock_id"],
         **stock_dict,
-        **price_and_name,
         "profit_and_loss": Decimal(
-            (Decimal(price_and_name["current_price"]) - stock_dict["purchase_price"])
+            (latest_entry["close_price"] - stock_dict["purchase_price"])
             * stock_dict["quantity"]
         ).quantize(Decimal("0.01")),
-        "history": ohlc_list,
-        "short_ma": short_moving_average_list,
-        "middle_ma": middle_moving_average_list,
-        "long_ma": long_moving_average_list,
-        "very_long_ma": very_long_moving_average_list,
-        "stochastics": [],
+        "history": history,
         "alerts": {
             "is_buy": bool(bool_buy),
             "is_sell": bool(bool_sell),
@@ -158,37 +168,20 @@ def create_finance_data(stock_dict):
     return finance_data
 
 
-def get_current_price_and_company_name(ticker):
-    # yfinanceでデータを取得
-    try:
-        current_price = ticker.info.get("currentPrice", "0.0")
-        company_name = ticker.info.get("longName", "情報がありません")
-        # pdb.set_trace()
-        return {"current_price": current_price, "company_name": company_name}
-    except Exception as e:
-        print(f"データ取得中にエラーが発生しました: {e}")
+# プロットする直近6ヶ月分のデータを得る
+def get_six_month_history(stock: Stock) -> list[dict]:
+    today = datetime.today()
+    six_months_ago = today - timedelta(days=6 * 30)
+    query = (
+        db.session.query(StockPrice)
+        .filter(StockPrice.symbol == stock.symbol, StockPrice.date >= six_months_ago)
+        .all()
+    )
+    return_data = [model_to_dict(row) for row in query]
+    return return_data
 
 
-# プロットするのは直近6ヶ月のデータなので、その分だけのdataframeを得る
-def get_six_month_list_from_dataframe_with_date_index(dataframe: pd.DataFrame):
-    one_month_ago = pd.Timestamp.now(tz="Asia/Tokyo") - pd.Timedelta(days=180)
-    recent_one_month_dataframe = dataframe[dataframe.index >= one_month_ago]
-    return get_list_of_dict_reseted_date_index(recent_one_month_dataframe)
-
-
-def calculate_moving_avarage(close_history: pd.DataFrame, window_size):
-    close_history["MA"] = close_history["Close"].rolling(window=window_size).mean()
-    return close_history[["MA"]]
-
-
-def get_list_of_dict_reseted_date_index(dataframe: pd.DataFrame) -> list[dict]:
-    return_dataframe = dataframe.reset_index()
-    return_dataframe["Date"] = return_dataframe["Date"].dt.strftime("%Y-%m-%d")
-    # 次の式では、各カラムをキーとして格納しているdict（行に相当する）のlist（つまり、行データを並べたもの）が返される。
-    return_list_of_dict = return_dataframe.to_dict(orient="records")
-    return return_list_of_dict
-
-
+# ストキャスティクスの計算（現在は使っていない）
 def calculate_stochastics(df: pd.DataFrame) -> pd.DataFrame:
     df["Lowest_Low"] = df["Low"].rolling(window=9).min()
     df["Highest_High"] = df["High"].rolling(window=9).max()
@@ -253,34 +246,42 @@ def main():
     app = create_app()
     with app.app_context():
         # stocks = read_all_stocks()
-        # pdb.set_trace()
-        stocks = [Stock.query.get(685)]
+        pdb.set_trace()
+        stocks = [Stock.query.get(1)]
         for stock in stocks:
             # stock_dict = model_to_dict(stock)
-            stock_dict = {"symbol": "7570"}
-            print(stock_dict["symbol"])
-            ticker = yf.Ticker(stock_dict["symbol"] + ".T")
-            history = ticker.history(period="1y").dropna()
-            history["MA5"] = history["Close"].rolling(window=5).mean()
-            history["MA20"] = history["Close"].rolling(window=20).mean()
-            history["MA60"] = history["Close"].rolling(window=60).mean()
-            history["MA100"] = history["Close"].rolling(window=100).mean()
-            for index, row in history.iterrows():
-                stock_price = StockPrice(
-                    symbol=stock_dict["symbol"],
-                    date=index.date(),
-                    open_price=row["Open"],
-                    high_price=row["High"],
-                    low_price=row["Low"],
-                    close_price=row["Close"],
-                    volume=row["Volume"],
-                    ma_5=row["MA5"],
-                    ma_20=row["MA20"],
-                    ma_60=row["MA60"],
-                    ma_100=row["MA100"],
-                )
-                db.session.add(stock_price)
-            db.session.commit()
+            # stock_dict = {"symbol": "7570"}
+            print(stock.symbol)
+            ohlc_list = get_six_month_ohlc_list_of_dict(stock)
+            print(ohlc_list)
+            # ticker = yf.Ticker(stock.symbol + ".T")
+            # company_name = ticker.info.get("longName", "情報がありません")
+            # history = ticker.history(period="1y").dropna()
+            # history["MA5"] = history["Close"].rolling(window=5).mean()
+            # history["MA20"] = history["Close"].rolling(window=20).mean()
+            # history["MA60"] = history["Close"].rolling(window=60).mean()
+            # history["MA100"] = history["Close"].rolling(window=100).mean()
+            # for index, row in history.iterrows():
+            #     stock_price = StockPrice(
+            #         symbol=stock_dict["symbol"],
+            #         date=index.date(),
+            #         open_price=row["Open"],
+            #         high_price=row["High"],
+            #         low_price=row["Low"],
+            #         close_price=row["Close"],
+            #         volume=row["Volume"],
+            #         ma_5=row["MA5"],
+            #         ma_20=row["MA20"],
+            #         ma_60=row["MA60"],
+            #         ma_100=row["MA100"],
+            #     )
+            #     db.session.add(stock_price)
+            # if company_name:
+            #     stock.company_name = company_name
+            # else:
+            #     print(f"Couldn't retrieve company name for {stock.symbol}")
+
+        # db.session.commit()
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ class Stock(db.Model):
 
     stock_id = db.Column(Integer, primary_key=True, autoincrement=True)
     symbol = db.Column(String(10), nullable=False)
+    company_name = db.Column(String(50))
     purchase_price = db.Column(Numeric(10, 2), nullable=False)
     quantity = db.Column(Integer, nullable=False)
     created_at = db.Column(DateTime, nullable=False, server_default=func.now())

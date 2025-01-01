@@ -21,15 +21,9 @@ function Mainboard() {
     companyName: true,
     purchasePrice: true,
     quantity: true,
-    currentPrice: true,
     profitAndLoss: true,
     alerts: true,
     history: true,
-    shortMa: false,
-    middleMa: false,
-    longMa: false,
-    veryLongMa: false,
-    stochastics: false,
   });
 
   useEffect(() => {
@@ -57,7 +51,6 @@ function Mainboard() {
         {
           purchasePrice: currentRow.purchasePrice,
           quantity: currentRow.quantity,
-          stopLossPrice: currentRow.stopLossPrice,
         }
       );
 
@@ -111,10 +104,6 @@ function Mainboard() {
     {
       accessorKey: "quantity",
       header: "保有株数",
-    },
-    {
-      accessorKey: "currentPrice",
-      header: "現在価格",
     },
     {
       accessorKey: "profitAndLoss",
@@ -275,11 +264,11 @@ function renderHistoryCell({ getValue, row }) {
     <div style={{ height: "300px", width: "700px" }}>
       <CandlestickChart
         history={getValue()}
-        shortMa={row.original.shortMa}
-        middleMa={row.original.middleMa}
-        longMa={row.original.longMa}
-        veryLongMa={row.original.veryLongMa}
-        stochastics={row.original.stochastics}
+        // shortMa={row.original.shortMa}
+        // middleMa={row.original.middleMa}
+        // longMa={row.original.longMa}
+        // veryLongMa={row.original.veryLongMa}
+        // stochastics={row.original.stochastics}
       />
     </div>
   );
