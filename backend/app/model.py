@@ -4,9 +4,11 @@ from sqlalchemy import (
     Numeric,
     Date,
     DateTime,
+    DECIMAL,
     String,
     Enum as SQLAlchemyEnum,
     ForeignKey,
+    UniqueConstraint,
 )
 from sqlalchemy.sql import func
 from .database import db
@@ -24,3 +26,22 @@ class Stock(db.Model):
     updated_at = db.Column(
         DateTime, nullable=False, server_default=func.now(), onupdate=func.now()
     )
+
+
+class StockPrice(db.Model):
+    __tablename__ = "stock_prices"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    symbol = Column(String, nullable=False)
+    date = Column(Date, nullable=False)
+    open_price = Column(DECIMAL(scale=2))
+    high_price = Column(DECIMAL(scale=2))
+    low_price = Column(DECIMAL(scale=2))
+    close_price = Column(DECIMAL(scale=2))
+    volume = Column(Integer)
+    ma_5 = Column(DECIMAL(scale=2))
+    ma_20 = Column(DECIMAL(scale=2))
+    ma_60 = Column(DECIMAL(scale=2))
+    ma_100 = Column(DECIMAL(scale=2))
+
+    __table_args__ = (UniqueConstraint("symbol", "date", name="uix_symbol_date"),)
