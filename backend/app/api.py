@@ -3,7 +3,8 @@ from .service import (
     create_stock,
     get_all_finance_data_dict,
     update_stock,
-    get_ten_finance_data_dict,
+    get_paginated_finance_data_dict,
+    get_total_count,
 )
 from decimal import Decimal
 import pdb
@@ -37,11 +38,25 @@ def register_stock():
 
 # READ
 @bp.route("/stocks", methods=["GET"])
-def get_all_stocks():
+def get_financial_data():
     # pdb.set_trace()
+    page = int(request.args.get("page", 1))
+    page_size = int(request.args.get("page_size", 10))
+    total_count = get_total_count()
+    total_pages = (total_count + page_size - 1) // page_size
     try:
-        finance_data = get_ten_finance_data_dict()
-        json_data = jsonify(convert_keys_to_camel_case(finance_data))
+        finance_data = get_paginated_finance_data_dict(page, page_size)
+        json_data = jsonify(
+            convert_keys_to_camel_case(
+                {
+                    "finance_data": finance_data,
+                    "current_page": page,
+                    "page_size": page_size,
+                    "total_pages": total_pages,
+                    "total_count": total_count,
+                }
+            )
+        )
         return json_data, 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400

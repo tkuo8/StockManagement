@@ -43,9 +43,10 @@ def read_all_stocks() -> list[Stock]:
         raise e
 
 
-def read_ten_stocks() -> list[Stock]:
+def read_paginated_stocks(page: int, page_size=10) -> list[Stock]:
+    offset = (page - 1) * page_size
     try:
-        stocks = Stock.query.limit(10).all()
+        stocks = db.session.query(Stock).limit(page_size).offset(offset).all()
         return stocks
     except Exception as e:
         print(f"error occured : {e}")
@@ -76,6 +77,10 @@ def update_stock(
         return f"Error occurred: {e}"
 
 
+def get_total_count():
+    return db.session.query(Stock).count()
+
+
 ###
 # 表示データ作成
 ###
@@ -93,10 +98,10 @@ def get_all_finance_data_dict():
     return return_data
 
 
-def get_ten_finance_data_dict():
+def get_paginated_finance_data_dict(page: int, page_size=10):
     # pdb.set_trace()
     return_data = []
-    stocks = read_ten_stocks()
+    stocks = read_paginated_stocks(page, page_size)
     for stock in stocks:
         # pdb.set_trace()
         finance_data = create_finance_data(stock)

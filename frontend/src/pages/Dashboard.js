@@ -9,7 +9,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import CandlestickChart from "../components/CandlestickChart";
 
-function Mainboard() {
+function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   const [tableData, setTableData] = useState([]);
   const [currentRow, setCurrentRow] = useState(null);
   const [showPopover, setShowPopover] = useState(false);
@@ -28,14 +28,15 @@ function Mainboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:50000/api/stocks")
+      .get(`http://localhost:50000/api/stocks?page=${page}&page_size=10`)
       .then((response) => {
-        setTableData(response.data);
+        setTableData(response.data.financeData);
+        setTotalPages(response.data.totalPages);
       })
       .catch((error) => {
         console.error("Error fetching stock data", error);
       });
-  }, []);
+  }, [page, totalPages]);
 
   const handleEdit = (rowData, event) => {
     setCurrentRow(rowData);
@@ -262,23 +263,43 @@ function renderAlertsCell({ getValue }) {
 function renderHistoryCell({ getValue, row }) {
   return (
     <div style={{ height: "300px", width: "700px" }}>
-      <CandlestickChart
-        history={getValue()}
-        // shortMa={row.original.shortMa}
-        // middleMa={row.original.middleMa}
-        // longMa={row.original.longMa}
-        // veryLongMa={row.original.veryLongMa}
-        // stochastics={row.original.stochastics}
-      />
+      <CandlestickChart history={getValue()} />
     </div>
   );
 }
 
 function Dashboard() {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   return (
     <div className="container mt-5">
       <Link to="/stockRegister">株価情報を新規登録する</Link>
-      <Mainboard />
+      <Mainboard
+        totalPages={totalPages}
+        setTotalPages={setTotalPages}
+        page={page}
+        setPage={setPage}
+      />
+      <div className="d-flex justify-content-center align-items-center my-3">
+        <Button
+          variant="outline-primary"
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </Button>
+        <span className="mx-3">
+          Page {page} of {totalPages}
+        </span>
+        <Button
+          variant="outline-primary"
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
