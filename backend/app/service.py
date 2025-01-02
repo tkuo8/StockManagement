@@ -1,4 +1,4 @@
-from .model import Stock, StockPrice
+from .model import Stock, StockPrice, Status, Alert
 from .database import db
 from decimal import Decimal
 import yfinance as yf
@@ -6,6 +6,7 @@ import pdb
 from .util import model_to_dict
 from datetime import datetime, timedelta
 import pandas as pd
+from sqlalchemy import exists, func
 
 ###
 # DB操作
@@ -43,10 +44,31 @@ def read_all_stocks() -> list[Stock]:
         raise e
 
 
-def read_paginated_stocks(page: int, page_size=10) -> list[Stock]:
+def get_filtered_query(status: Status):
+    if status:
+        try:
+            stocks = (
+                db.session.query(Stock)
+                .join(Alert, Stock.symbol == Alert.symbol)
+                .filter(func.lower(Alert.status) == status.lower())
+            )
+            return stocks
+        except Exception as e:
+            print(f"error occured : {e}")
+            raise e
+    else:
+        try:
+            stocks = db.session.query(Stock)
+            return stocks
+        except Exception as e:
+            print(f"error occured : {e}")
+            raise e
+
+
+def read_paginated_stocks(query, page: int, page_size=10) -> list[Stock]:
     offset = (page - 1) * page_size
     try:
-        stocks = db.session.query(Stock).limit(page_size).offset(offset).all()
+        stocks = query.limit(page_size).offset(offset).all()
         return stocks
     except Exception as e:
         print(f"error occured : {e}")
@@ -77,8 +99,21 @@ def update_stock(
         return f"Error occurred: {e}"
 
 
-def get_total_count():
-    return db.session.query(Stock).count()
+def get_total_count(query):
+    return query.count()
+
+
+def has_alert_status(symbol: str, status: Status) -> bool:
+    result = db.session.query(
+        exists().where(Alert.status == status).where(Alert.symbol == symbol)
+    ).scalar()
+    return result
+
+
+def read_target_stocks(status: Status, page: int, page_size=10):
+    query = get_filtered_query(status)
+    stocks = read_paginated_stocks(query, page, page_size)
+    return stocks
 
 
 ###
@@ -98,10 +133,10 @@ def get_all_finance_data_dict():
     return return_data
 
 
-def get_paginated_finance_data_dict(page: int, page_size=10):
+def get_target_finance_data_dict(page: int, status: Status, page_size=10):
     # pdb.set_trace()
     return_data = []
-    stocks = read_paginated_stocks(page, page_size)
+    stocks = read_target_stocks(status, page, page_size)
     for stock in stocks:
         # pdb.set_trace()
         finance_data = create_finance_data(stock)
@@ -121,6 +156,10 @@ def create_finance_data(stock: Stock):
     stock_dict = model_to_dict(stock)
     history = get_six_month_history(stock)
 
+    bool_buy = has_alert_status(stock.symbol, Status.BUY)
+    bool_sell = has_alert_status(stock.symbol, Status.SELL)
+    bool_exclusion = has_alert_status(stock.symbol, Status.EXCLUSION)
+
     # 日付を datetime 型に変換して、降順にソート
     sorted_history = sorted(
         history, key=lambda x: datetime.strptime(x["date"], "%Y-%m-%d"), reverse=True
@@ -132,30 +171,30 @@ def create_finance_data(stock: Stock):
     else:
         latest_entry = None
 
-    # 一つ前の日付の行
-    if len(sorted_history) > 1:
-        previous_entry = sorted_history[1]
-    else:
-        previous_entry = None
+    # # 一つ前の日付の行
+    # if len(sorted_history) > 1:
+    #     previous_entry = sorted_history[1]
+    # else:
+    #     previous_entry = None
 
-    bool_buy = is_buy(
-        open=latest_entry["open_price"],
-        close=latest_entry["close_price"],
-        short_ma_yesterday=previous_entry["ma_5"],
-        short_ma=latest_entry["ma_5"],
-        very_long_ma=latest_entry["ma_100"],
-    )
+    # bool_buy = is_buy(
+    #     open=latest_entry["open_price"],
+    #     close=latest_entry["close_price"],
+    #     short_ma_yesterday=previous_entry["ma_5"],
+    #     short_ma=latest_entry["ma_5"],
+    #     very_long_ma=latest_entry["ma_100"],
+    # )
 
-    bool_sell = is_sell(
-        open=latest_entry["open_price"],
-        close=latest_entry["close_price"],
-        short_ma_yesterday=previous_entry["ma_5"],
-        short_ma=latest_entry["ma_5"],
-    )
+    # bool_sell = is_sell(
+    #     open=latest_entry["open_price"],
+    #     close=latest_entry["close_price"],
+    #     short_ma_yesterday=previous_entry["ma_5"],
+    #     short_ma=latest_entry["ma_5"],
+    # )
 
-    bool_exclusion = is_exclusion(
-        close=latest_entry["close_price"], very_long_ma=latest_entry["ma_100"]
-    )
+    # bool_exclusion = is_exclusion(
+    #     close=latest_entry["close_price"], very_long_ma=latest_entry["ma_100"]
+    # )
 
     finance_data = {
         **stock_dict,
@@ -250,43 +289,95 @@ def main():
 
     app = create_app()
     with app.app_context():
-        # stocks = read_all_stocks()
-        pdb.set_trace()
-        stocks = [Stock.query.get(1)]
+        stocks = read_all_stocks()
+        # stocks = [Stock.query.get(1)]
         for stock in stocks:
-            # stock_dict = model_to_dict(stock)
-            # stock_dict = {"symbol": "7570"}
-            print(stock.symbol)
-            ohlc_list = get_six_month_ohlc_list_of_dict(stock)
-            print(ohlc_list)
-            # ticker = yf.Ticker(stock.symbol + ".T")
-            # company_name = ticker.info.get("longName", "情報がありません")
-            # history = ticker.history(period="1y").dropna()
-            # history["MA5"] = history["Close"].rolling(window=5).mean()
-            # history["MA20"] = history["Close"].rolling(window=20).mean()
-            # history["MA60"] = history["Close"].rolling(window=60).mean()
-            # history["MA100"] = history["Close"].rolling(window=100).mean()
-            # for index, row in history.iterrows():
-            #     stock_price = StockPrice(
-            #         symbol=stock_dict["symbol"],
-            #         date=index.date(),
-            #         open_price=row["Open"],
-            #         high_price=row["High"],
-            #         low_price=row["Low"],
-            #         close_price=row["Close"],
-            #         volume=row["Volume"],
-            #         ma_5=row["MA5"],
-            #         ma_20=row["MA20"],
-            #         ma_60=row["MA60"],
-            #         ma_100=row["MA100"],
-            #     )
-            #     db.session.add(stock_price)
-            # if company_name:
-            #     stock.company_name = company_name
-            # else:
-            #     print(f"Couldn't retrieve company name for {stock.symbol}")
+            history = get_six_month_history(stock)
 
-        # db.session.commit()
+            # 日付を datetime 型に変換して、降順にソート
+            sorted_history = sorted(
+                history,
+                key=lambda x: datetime.strptime(x["date"], "%Y-%m-%d"),
+                reverse=True,
+            )
+
+            # 最近の行
+            if len(sorted_history) > 0:
+                latest_entry = sorted_history[0]
+            else:
+                latest_entry = None
+
+            # 一つ前の日付の行
+            if len(sorted_history) > 1:
+                previous_entry = sorted_history[1]
+            else:
+                previous_entry = None
+
+            bool_buy = is_buy(
+                open=latest_entry["open_price"],
+                close=latest_entry["close_price"],
+                short_ma_yesterday=previous_entry["ma_5"],
+                short_ma=latest_entry["ma_5"],
+                very_long_ma=latest_entry["ma_100"],
+            )
+
+            bool_sell = is_sell(
+                open=latest_entry["open_price"],
+                close=latest_entry["close_price"],
+                short_ma_yesterday=previous_entry["ma_5"],
+                short_ma=latest_entry["ma_5"],
+            )
+
+            bool_exclusion = is_exclusion(
+                close=latest_entry["close_price"], very_long_ma=latest_entry["ma_100"]
+            )
+
+            if bool_buy:
+                db.session.add(Alert(symbol=stock.symbol, status=Status.BUY))
+                db.session.commit()
+
+            if bool_sell:
+                db.session.add(Alert(symbol=stock.symbol, status=Status.SELL))
+                db.session.commit()
+
+            if bool_exclusion:
+                db.session.add(Alert(symbol=stock.symbol, status=Status.EXCLUSION))
+                db.session.commit()
+
+
+# stock_dict = model_to_dict(stock)
+# stock_dict = {"symbol": "7570"}
+# print(stock.symbol)
+# ohlc_list = get_six_month_ohlc_list_of_dict(stock)
+# print(ohlc_list)
+# ticker = yf.Ticker(stock.symbol + ".T")
+# company_name = ticker.info.get("longName", "情報がありません")
+# history = ticker.history(period="1y").dropna()
+# history["MA5"] = history["Close"].rolling(window=5).mean()
+# history["MA20"] = history["Close"].rolling(window=20).mean()
+# history["MA60"] = history["Close"].rolling(window=60).mean()
+# history["MA100"] = history["Close"].rolling(window=100).mean()
+# for index, row in history.iterrows():
+#     stock_price = StockPrice(
+#         symbol=stock_dict["symbol"],
+#         date=index.date(),
+#         open_price=row["Open"],
+#         high_price=row["High"],
+#         low_price=row["Low"],
+#         close_price=row["Close"],
+#         volume=row["Volume"],
+#         ma_5=row["MA5"],
+#         ma_20=row["MA20"],
+#         ma_60=row["MA60"],
+#         ma_100=row["MA100"],
+#     )
+#     db.session.add(stock_price)
+# if company_name:
+#     stock.company_name = company_name
+# else:
+#     print(f"Couldn't retrieve company name for {stock.symbol}")
+
+# db.session.commit()
 
 
 if __name__ == "__main__":

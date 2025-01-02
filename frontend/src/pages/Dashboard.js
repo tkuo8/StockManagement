@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Overlay, Popover, Form, Badge } from "react-bootstrap";
+import {
+  Button,
+  Overlay,
+  Popover,
+  Form,
+  Badge,
+  Dropdown,
+} from "react-bootstrap";
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,6 +22,8 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   const [showPopover, setShowPopover] = useState(false);
   const [popoverTarget, setPopoverTarget] = useState(null);
 
+  const [status, setStatus] = useState(""); // アラートのフィルター状態
+
   const [columnVisibility, setColumnVisibility] = useState({
     stockId: false,
     symbol: true,
@@ -28,7 +37,9 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:50000/api/stocks?page=${page}&page_size=10`)
+      .get(
+        `http://localhost:50000/api/stocks?page=${page}&page_size=10&status=${status}`
+      )
       .then((response) => {
         setTableData(response.data.financeData);
         setTotalPages(response.data.totalPages);
@@ -36,7 +47,7 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
       .catch((error) => {
         console.error("Error fetching stock data", error);
       });
-  }, [page, totalPages]);
+  }, [page, totalPages, status]);
 
   const handleEdit = (rowData, event) => {
     setCurrentRow(rowData);
@@ -84,6 +95,10 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
     }));
   };
 
+  const handleStatusChange = (selectedStatus) => {
+    setStatus(selectedStatus);
+  };
+
   // カラム定義
   const columns = [
     {
@@ -97,6 +112,7 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
     {
       accessorKey: "companyName",
       header: "企業名",
+      getSize: () => 100,
     },
     {
       accessorKey: "purchasePrice",
@@ -136,10 +152,32 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   return (
     <div className="card shadow" style={{ height: "600px" }}>
       <div className="card-body">
+        {/* フィルター */}
+        <Form.Group className="mb-3">
+          <Form.Label>アラートフィルター</Form.Label>
+          <Dropdown onSelect={handleStatusChange}>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              {status === "buy"
+                ? "買い"
+                : status === "sell"
+                ? "売り"
+                : status === "exclusion"
+                ? "除外"
+                : "-"}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="">-</Dropdown.Item>
+              <Dropdown.Item eventKey="buy">買い</Dropdown.Item>
+              <Dropdown.Item eventKey="sell">売り</Dropdown.Item>
+              <Dropdown.Item eventKey="exclusion">除外</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Form.Group>
         <div className="table-responsive">
           <div
             className="table-wrapper"
-            style={{ overflowY: "auto", maxHeight: "580px" }}
+            style={{ overflowY: "auto", maxHeight: "450px" }}
           >
             <table className="table align-middle">
               <thead className="table-primary">
@@ -149,7 +187,12 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
                       <th
                         key={header.id}
                         className="text-center"
-                        style={{ position: "sticky", top: 0, zIndex: 1 }}
+                        style={{
+                          width: header.getSize(),
+                          position: "sticky",
+                          top: 0,
+                          zIndex: 1,
+                        }}
                       >
                         {header.isPlaceholder
                           ? null

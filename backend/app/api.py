@@ -3,8 +3,9 @@ from .service import (
     create_stock,
     get_all_finance_data_dict,
     update_stock,
-    get_paginated_finance_data_dict,
+    get_target_finance_data_dict,
     get_total_count,
+    get_filtered_query,
 )
 from decimal import Decimal
 import pdb
@@ -42,10 +43,13 @@ def get_financial_data():
     # pdb.set_trace()
     page = int(request.args.get("page", 1))
     page_size = int(request.args.get("page_size", 10))
-    total_count = get_total_count()
+    status = request.args.get("status", "")
+
+    total_count = get_total_count(get_filtered_query(status))
     total_pages = (total_count + page_size - 1) // page_size
+
     try:
-        finance_data = get_paginated_finance_data_dict(page, page_size)
+        finance_data = get_target_finance_data_dict(page, status, page_size)
         json_data = jsonify(
             convert_keys_to_camel_case(
                 {

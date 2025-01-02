@@ -12,6 +12,13 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 from .database import db
+from enum import Enum
+
+
+class Status(Enum):
+    BUY = "buy"
+    SELL = "sell"
+    EXCLUSION = "exclusion"
 
 
 # stocksテーブルの定義
@@ -46,3 +53,11 @@ class StockPrice(db.Model):
     ma_100 = Column(DECIMAL(scale=2))
 
     __table_args__ = (UniqueConstraint("symbol", "date", name="uix_symbol_date"),)
+
+
+class Alert(db.Model):
+    __tablename__ = "alerts"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    symbol = Column(String, nullable=False)
+    status = Column(SQLAlchemyEnum(Status, native_enum=False), nullable=False)
