@@ -88,7 +88,7 @@ const CandlestickChart = ({ history }) => {
             })),
             yAxisID: "y1",
             type: "line",
-            borderColor: "#fcc800",
+            borderColor: "#ff8c00",
             borderWidth: 1,
             fill: false,
             pointRadius: 0,

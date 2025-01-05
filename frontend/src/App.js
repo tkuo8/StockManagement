@@ -13,7 +13,7 @@ function App() {
           <h3>株管理アプリ</h3>
           <Routes>
             <Route path="/stockRegister" element={<StockRegister />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
           </Routes>
         </div>
       </Router>

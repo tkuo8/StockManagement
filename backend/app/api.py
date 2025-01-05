@@ -6,6 +6,7 @@ from .service import (
     get_target_finance_data_dict,
     get_total_count,
     get_filtered_query,
+    update_all_stock_data,
 )
 from decimal import Decimal
 import pdb
@@ -44,12 +45,13 @@ def get_financial_data():
     page = int(request.args.get("page", 1))
     page_size = int(request.args.get("page_size", 10))
     status = request.args.get("status", "")
+    possession = request.args.get("possession", "")
 
-    total_count = get_total_count(get_filtered_query(status))
+    total_count = get_total_count(get_filtered_query(status, possession))
     total_pages = (total_count + page_size - 1) // page_size
 
     try:
-        finance_data = get_target_finance_data_dict(page, status, page_size)
+        finance_data = get_target_finance_data_dict(page, status, possession, page_size)
         json_data = jsonify(
             convert_keys_to_camel_case(
                 {
@@ -78,5 +80,16 @@ def put_stock(stock_id):
     try:
         updated_data_dict = update_stock(stock_id, purchase_price, quantity)
         return jsonify(convert_keys_to_camel_case(updated_data_dict)), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+
+# UPDATE STOCKS DATA
+@bp.route("/stocks/update_all", methods=["GET"])
+def update_all_stocks_data():
+    # pdb.set_trace()
+    try:
+        update_all_stock_data()
+        return jsonify("update all stocks data is completed."), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400

@@ -23,6 +23,7 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   const [popoverTarget, setPopoverTarget] = useState(null);
 
   const [status, setStatus] = useState(""); // アラートのフィルター状態
+  const [possession, setPossession] = useState(""); // 保有中・未保有フィルター状態
 
   const [columnVisibility, setColumnVisibility] = useState({
     stockId: false,
@@ -38,7 +39,7 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:50000/api/stocks?page=${page}&page_size=10&status=${status}`
+        `http://localhost:50000/api/stocks?page=${page}&page_size=10&status=${status}&possession=${possession}`
       )
       .then((response) => {
         setTableData(response.data.financeData);
@@ -47,7 +48,18 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
       .catch((error) => {
         console.error("Error fetching stock data", error);
       });
-  }, [page, totalPages, status]);
+  }, [page, totalPages, status, possession]);
+
+  const handleUpdateAllStocksData = () => {
+    axios
+      .get("http://localhost:50000/api/stocks/update_all")
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock data", error);
+      });
+  };
 
   const handleEdit = (rowData, event) => {
     setCurrentRow(rowData);
@@ -97,6 +109,10 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
 
   const handleStatusChange = (selectedStatus) => {
     setStatus(selectedStatus);
+  };
+
+  const handlePossessionChange = (selectedPossession) => {
+    setPossession(selectedPossession);
   };
 
   // カラム定義
@@ -152,28 +168,58 @@ function Mainboard({ setPage, setTotalPages, page, totalPages }) {
   return (
     <div className="card shadow" style={{ height: "600px" }}>
       <div className="card-body">
-        {/* フィルター */}
-        <Form.Group className="mb-3">
-          <Form.Label>アラートフィルター</Form.Label>
-          <Dropdown onSelect={handleStatusChange}>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              {status === "buy"
-                ? "買い"
-                : status === "sell"
-                ? "売り"
-                : status === "exclusion"
-                ? "除外"
-                : "-"}
-            </Dropdown.Toggle>
+        <div className="d-flex align-items-center gap-3 mb-3">
+          {/* 保有中フィルター */}
+          <Form.Group className="mb-3">
+            <Form.Label>保有中フィルター</Form.Label>
+            <Dropdown onSelect={handlePossessionChange}>
+              <Dropdown.Toggle variant="primary" id="dropdown-possession">
+                {possession === "in"
+                  ? "保有中"
+                  : possession === "out"
+                  ? "未保有"
+                  : "-"}
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="">-</Dropdown.Item>
-              <Dropdown.Item eventKey="buy">買い</Dropdown.Item>
-              <Dropdown.Item eventKey="sell">売り</Dropdown.Item>
-              <Dropdown.Item eventKey="exclusion">除外</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Form.Group>
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="">-</Dropdown.Item>
+                <Dropdown.Item eventKey="in">保有中</Dropdown.Item>
+                <Dropdown.Item eventKey="out">未保有</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Form.Group>
+
+          {/* アラートフィルター */}
+          <Form.Group className="mb-3">
+            <Form.Label>アラートフィルター</Form.Label>
+            <Dropdown onSelect={handleStatusChange}>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                {status === "buy"
+                  ? "買い"
+                  : status === "sell"
+                  ? "売り"
+                  : status === "exclusion"
+                  ? "除外"
+                  : "-"}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="">-</Dropdown.Item>
+                <Dropdown.Item eventKey="buy">買い</Dropdown.Item>
+                <Dropdown.Item eventKey="sell">売り</Dropdown.Item>
+                <Dropdown.Item eventKey="exclusion">除外</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Form.Group>
+
+          <Button
+            variant="secondary"
+            className="mb-3"
+            onClick={handleUpdateAllStocksData}
+          >
+            株価データ全更新（約5分）
+          </Button>
+        </div>
         <div className="table-responsive">
           <div
             className="table-wrapper"
