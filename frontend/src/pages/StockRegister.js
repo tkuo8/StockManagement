@@ -105,7 +105,7 @@ function StockRegister() {
           </form>
         </div>
       </div>
-      <Link to="/dashboard">ダッシュボードに戻る</Link>
+      <Link to="/">ダッシュボードに戻る</Link>
     </div>
   );
 }

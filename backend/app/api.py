@@ -43,15 +43,18 @@ def register_stock():
 def get_financial_data():
     # pdb.set_trace()
     page = int(request.args.get("page", 1))
-    page_size = int(request.args.get("page_size", 10))
+    page_size = int(request.args.get("pageSize", 10))
     status = request.args.get("status", "")
     possession = request.args.get("possession", "")
+    search_symbol = request.args.get("searchSymbol")
 
-    total_count = get_total_count(get_filtered_query(status, possession))
+    total_count = get_total_count(get_filtered_query(status, possession, search_symbol))
     total_pages = (total_count + page_size - 1) // page_size
 
     try:
-        finance_data = get_target_finance_data_dict(page, status, possession, page_size)
+        finance_data = get_target_finance_data_dict(
+            page, status, possession, search_symbol, page_size
+        )
         json_data = jsonify(
             convert_keys_to_camel_case(
                 {

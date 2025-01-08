@@ -16,22 +16,22 @@ import {
 } from "chartjs-chart-financial";
 import "chartjs-adapter-date-fns";
 
-// Chart.js モジュールを登録
-ChartJS.register(
-  CandlestickController,
-  CandlestickElement,
-  CategoryScale,
-  LinearScale,
-  LineController,
-  LineElement,
-  PointElement,
-  TimeScale,
-  Tooltip,
-  Legend
-);
-
 // グラフコンポーネント
 const CandlestickChart = ({ history }) => {
+  // Chart.js モジュールを登録
+  ChartJS.register(
+    CandlestickController,
+    CandlestickElement,
+    CategoryScale,
+    LinearScale,
+    LineController,
+    LineElement,
+    PointElement,
+    TimeScale,
+    Tooltip,
+    Legend
+  );
+
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -160,6 +160,19 @@ const CandlestickChart = ({ history }) => {
           //     pointRadius: 0,
           //     borderDash: [5, 2],
           //   },
+          {
+            label: "volume",
+            data: history.map((item) => ({
+              x: new Date(item.date),
+              y: item.volume,
+            })),
+            type: "bar",
+            yAxisID: "y2",
+            backgroundColor: "rgba(184, 192, 75, 0.2)",
+            borderColor: "rgb(192, 184, 75, 0.7)",
+            borderWidth: 1,
+            barPercentage: 0.01,
+          },
         ],
       },
       options: {
@@ -179,15 +192,14 @@ const CandlestickChart = ({ history }) => {
               text: "Stock Price / Moving Average",
             },
           },
-          //   y2: {
-          //     position: "right",
-          //     beginAtZero: true,
-          //     max: 100,
-          //     title: {
-          //       display: true,
-          //       text: "Stochastics Percentage",
-          //     },
-          //   },
+          y2: {
+            position: "right",
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "volume",
+            },
+          },
         },
       },
     });

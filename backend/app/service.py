@@ -44,7 +44,16 @@ def read_all_stocks() -> list[Stock]:
         raise e
 
 
-def get_filtered_query(status: Status, possession: str):
+def get_filtered_query(status: Status, possession: str, search_symbol: str):
+    # pdb.set_trace()
+    if search_symbol:
+        try:
+            query = db.session.query(Stock).filter(Stock.symbol == search_symbol)
+            return query
+        except Exception as e:
+            print(f"error occured : {e}")
+            raise e
+
     if status:
         try:
             query = (
@@ -61,6 +70,7 @@ def get_filtered_query(status: Status, possession: str):
         except Exception as e:
             print(f"error occured : {e}")
             raise e
+
     if possession == "in":
         try:
             query = query.filter(Stock.quantity > 0)
@@ -72,6 +82,7 @@ def get_filtered_query(status: Status, possession: str):
         except Exception as e:
             print(f"error occured : {e}")
             raise e
+
     return query
 
 
@@ -120,22 +131,52 @@ def has_alert_status(symbol: str, status: Status) -> bool:
     return result
 
 
-def read_target_stocks(status: Status, possession: str, page: int, page_size=10):
-    query = get_filtered_query(status, possession)
+def read_target_stocks(
+    status: Status, possession: str, search_symbol: str, page: int, page_size=10
+):
+    query = get_filtered_query(status, possession, search_symbol)
     stocks = read_paginated_stocks(query, page, page_size)
     return stocks
 
 
 def save_stock_data(symbol, start_date, end_date):
     # yfinanceでデータ取得
+    # 前日までのデータ（yf.downloadは取引終了後のデータしか取得できない。現在価格は当日のデータを分間隔で取得して擬似的に得る。）
     data = yf.download(symbol + ".T", start=start_date, end=end_date)
-    if data.empty:
-        print(f"No data found for {symbol}")
-        return False
-    data.dropna(inplace=True)
+    today_data = yf.download(symbol + ".T", period="1d", interval="1m")
+    # pdb.set_trace()
+    if today_data.empty:
+        if data.empty:
+            return False
+        else:
+            combined_data = data
+    else:
+        # カラムを確認して正しいカラム名を使用
+        columns = today_data.columns.levels[0]  # MultiIndexの場合
+
+        # 当日のデータを1日単位に集約
+        current_data = today_data.resample("1D").agg(
+            {
+                (columns[0], symbol + ".T"): "last",  # 'Adj Close'
+                (columns[1], symbol + ".T"): "last",  # 'Close'
+                (columns[2], symbol + ".T"): "max",  # 'High'
+                (columns[3], symbol + ".T"): "min",  # 'Low'
+                (columns[4], symbol + ".T"): "first",  # 'Open'
+                (columns[5], symbol + ".T"): "sum",  # 'Volume'
+            }
+        )
+        # インデックスの整合性をとるため、today_dailyのインデックスをhistorical_dataに合わせる
+        current_data.index = current_data.index.normalize()
+
+        if data.empty:
+            combined_data = current_data
+        else:
+            combined_data = pd.concat([data, current_data])
+
+    # combined_datan.dropna(inplace=True)
 
     # データベースに保存
-    for index, row in data.iterrows():
+    for index, row in combined_data.iterrows():
         stock_price = StockPrice(
             symbol=symbol,
             date=index.date(),  # DateTimeIndexから日付部分を取得
@@ -188,37 +229,37 @@ def update_stock_data(symbol):
     )
 
     if latest_date:
-        start_date = (latest_date[0] + timedelta(days=1)).strftime("%Y-%m-%d")
+        start_date = latest_date[0].strftime("%Y-%m-%d")
     else:
         start_date = "2024-01-01"  # デフォルト開始日
 
     end_date = datetime.now().strftime("%Y-%m-%d")
 
-    if start_date < end_date:  # 新しいデータがある場合のみ更新
-        print(f"symbol:{symbol} update start")
-        can_update = save_stock_data(symbol, start_date, end_date)
-        # print("save stock data finished")
-        # start_date<end_dateがTrueの場合でも、その間が土日祝日だったりすると、
-        # yfinanceの値は無いので、移動平均の計算のとこで存在しない日付の分を計算しようとして
-        # エラーが出るから、yfinanceからの取得結果が無いかどうかで以後の処理を行うかどうか決めている。
-        if can_update:
-            save_moving_average(
-                symbol,
-                datetime.strptime(start_date, "%Y-%m-%d"),
-                datetime.strptime(end_date, "%Y-%m-%d"),
-            )
-            # print("save moving average finished")
-            update_alert(symbol)
-            # print("update alert finished")
+    print(f"symbol:{symbol} update start")
+
+    can_update = save_stock_data(symbol, start_date, end_date)
+    # print("save stock data finished")
+    # start_date<end_dateがTrueの場合でも、その間が土日祝日だったりすると、
+    # yfinanceの値は無いので、移動平均の計算のとこで存在しない日付の分を計算しようとして
+    # エラーが出るから、yfinanceからの取得結果が無いかどうかで以後の処理を行うかどうか決めている。
+    if can_update:
+        save_moving_average(
+            symbol,
+            datetime.strptime(start_date, "%Y-%m-%d"),
+            datetime.strptime(end_date, "%Y-%m-%d"),
+        )
+        # print("save moving average finished")
+        update_alert(symbol)
+        # print("update alert finished")
 
 
 def save_moving_average(symbol, start_date, end_date):
-    one_hundred_days_ago = start_date - timedelta(days=200)
+    days_ago = start_date - timedelta(days=200)
     query_data = (
         db.session.query(StockPrice)
         .filter(
             StockPrice.symbol == symbol,
-            StockPrice.date.between(one_hundred_days_ago.date(), end_date.date()),
+            StockPrice.date.between(days_ago.date(), end_date.date()),
         )
         .all()
     )
@@ -311,11 +352,11 @@ def get_all_finance_data_dict():
 
 
 def get_target_finance_data_dict(
-    page: int, status: Status, possession: str, page_size=10
+    page: int, status: Status, possession: str, search_symbol: str, page_size=10
 ):
     # pdb.set_trace()
     return_data = []
-    stocks = read_target_stocks(status, possession, page, page_size)
+    stocks = read_target_stocks(status, possession, search_symbol, page, page_size)
     for stock in stocks:
         # pdb.set_trace()
         finance_data = create_finance_data(stock)
@@ -443,7 +484,9 @@ def main():
 
     app = create_app()
     with app.app_context():
-        update_all_stock_data()
+        data = yf.download("9478.T", start="2025-01-07", end="2025-01-07")
+        print(data)
+        # update_all_stock_data()
         # stocks = read_all_stocks()
         # # stocks = [Stock.query.get(1)]
         # for stock in stocks:
