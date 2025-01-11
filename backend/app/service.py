@@ -153,23 +153,33 @@ def save_stock_data(symbol, start_date, end_date):
     else:
         # カラムを確認して正しいカラム名を使用
         columns = today_data.columns.levels[0]  # MultiIndexの場合
-
+        # pdb.set_trace()
         # 当日のデータを1日単位に集約
         current_data = today_data.resample("1D").agg(
             {
-                (columns[0], symbol + ".T"): "last",  # 'Adj Close'
-                (columns[1], symbol + ".T"): "last",  # 'Close'
-                (columns[2], symbol + ".T"): "max",  # 'High'
-                (columns[3], symbol + ".T"): "min",  # 'Low'
-                (columns[4], symbol + ".T"): "first",  # 'Open'
-                (columns[5], symbol + ".T"): "sum",  # 'Volume'
+                # (columns[0], symbol + ".T"): "last",  # 'Adj Close'
+                # (columns[1], symbol + ".T"): "last",  # 'Close'
+                # (columns[2], symbol + ".T"): "max",  # 'High'
+                # (columns[3], symbol + ".T"): "min",  # 'Low'
+                # (columns[4], symbol + ".T"): "first",  # 'Open'
+                # (columns[5], symbol + ".T"): "sum",  # 'Volume'
+                # yfinanceのバージョン違い？取得できるデータが違う？以下はwindows機でやる場合。
+                (columns[0], symbol + ".T"): "last",  # 'Close'
+                (columns[1], symbol + ".T"): "max",  # 'High'
+                (columns[2], symbol + ".T"): "min",  # 'Low'
+                (columns[3], symbol + ".T"): "first",  # 'Open'
+                (columns[4], symbol + ".T"): "sum",  # 'Volume'
             }
         )
         # インデックスの整合性をとるため、today_dailyのインデックスをhistorical_dataに合わせる
         current_data.index = current_data.index.normalize()
 
+        target_date = current_data.index[-1].date()
+
         if data.empty:
             combined_data = current_data
+        elif target_date in data.index.date:
+            combined_data = data
         else:
             combined_data = pd.concat([data, current_data])
 
