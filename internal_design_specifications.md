@@ -195,4 +195,3 @@
 - **バックエンド**: Python (Flask)
 - **データベース**: MySQL
 - **外部サービス**: Yahoo Finance API, Alpha Vantage API
-- **CI/CD**: GitHub Actions
