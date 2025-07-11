@@ -112,8 +112,8 @@
 以下の技術を採用します：
 
 - **React**: フロントエンド開発。
-- **Java + Spring Boot**: バックエンド API 開発。
+- **Python + Flask**: バックエンド API 開発。
 - **MySQL**: データベース。
 - **Bootstrap**: フロントエンドデザイン。
 - **Chart.js**: グラフ表示。
-- **GitHub Actions**: CI/CD。
+
